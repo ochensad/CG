@@ -142,6 +142,37 @@ def Keyboard():
     but7.config(state = NORMAL)
 
 
+def paint_a(event):
+    x1 = event.x
+    y1 = event.y
+    global last_move
+    if ((x1 - 5 >= 0) and (x1 + 5 <= 1500) and (y1 - 5 >= 0) and (y1 + 5 <= 900)):
+        last_move = cvs.create_oval(x1-5,y1-5,x1+5,y1+5,fill = "#FF69B4")
+        X_p_a.append(x1)
+        Y_p_a.append(y1)
+
+def paint_b(event):
+    x1 = event.x
+    y1 = event.y
+    global last_move
+    if ((x1 - 5 >= 0) and (x1 + 5 <= 1500) and (y1 - 5 >= 0) and (y1 + 5 <= 900)):
+        last_move = cvs.create_oval(x1-5,y1-5,x1+5,y1+5,fill = "#00FF00")
+        X_p_b.append(x1)
+        Y_p_b.append(y1)
+
+
+def Mouse():
+    global last_move
+    but1.config(state = DISABLED)
+    but5.config(state = NORMAL)
+    but6.config(state = NORMAL)
+    but7.config(state = NORMAL)
+
+    cvs.bind('<Button-1>', paint_a)
+    cvs.bind('<Button-3>', paint_b)
+    
+
+
 window = Tk()
 window.geometry('1200x600')
 window.resizable(width=False, height=False) # Запрет разворота окна
@@ -154,7 +185,7 @@ name1 = Label(window, text = "Выберете способ ввода:", relief
 name1.place(x = 1030, y = 10)
 but1 = Button(window, text = "Клавиатура", command = Keyboard)
 but1.place(x = 1020, y = 35)
-but2 = Button(window, text = "Мышь")
+but2 = Button(window, text = "Мышь", command = Mouse)
 but2.place(x = 1125, y = 35)
 
 name2 = Label(window, text = "Первое множество", relief = "solid", bg = "#FF69B4")
