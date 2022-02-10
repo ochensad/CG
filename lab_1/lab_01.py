@@ -39,6 +39,7 @@ def points_b():
     del_flag = "b"
     last_move = cvs.create_oval(X_p_b[len(X_p_b) - 1]-5,Y_p_b[len(Y_p_b)-1]-5,X_p_b[len(X_p_b)-1]+5,Y_p_b[len(Y_p_b) - 1]+5,fill = "#00FF00")
     en2.delete(0, END)
+    but9.config(state = NORMAL)
 
 def points_a():
     x = ''
@@ -63,6 +64,7 @@ def points_a():
     del_flag = "a"
     last_move = cvs.create_oval(X_p_a[len(X_p_a) - 1]-5,Y_p_a[len(Y_p_a)-1]-5,X_p_a[len(X_p_a)-1]+5,Y_p_a[len(Y_p_a) - 1]+5,fill = "#FF69B4")
     en1.delete(0, END)
+    but9.config(state = NORMAL)
 
 def delite_move():
 	global del_flag
@@ -150,6 +152,7 @@ def paint_a(event):
         last_move = cvs.create_oval(x1-5,y1-5,x1+5,y1+5,fill = "#FF69B4")
         X_p_a.append(x1)
         Y_p_a.append(y1)
+        but9.config(state = NORMAL)
 
 def paint_b(event):
     x1 = event.x
@@ -159,6 +162,7 @@ def paint_b(event):
         last_move = cvs.create_oval(x1-5,y1-5,x1+5,y1+5,fill = "#00FF00")
         X_p_b.append(x1)
         Y_p_b.append(y1)
+        but9.config(state = NORMAL)
 
 
 def Mouse():
@@ -170,7 +174,6 @@ def Mouse():
 
     cvs.bind('<Button-1>', paint_a)
     cvs.bind('<Button-3>', paint_b)
-    
 
 
 window = Tk()
@@ -232,7 +235,7 @@ but7.place(x = 1160, y = 430)
 but8 = Button(window, state = DISABLED, text = " Окончить ввод ")
 but8.place(x = 1050, y = 470)
 
-but9 = Button(window, text = " Отменить действие ", command = delite_move)
+but9 = Button(window, state = DISABLED, text = " Отменить действие ", command = delite_move)
 but9.place(x = 1040, y = 510)
 
 window.mainloop()	
