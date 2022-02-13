@@ -3,15 +3,37 @@ import tkinter.messagebox as box
 import numpy as np
 from math import *
 
-X_p_a=[] #Первое множество точек
+X_p_a=[] #Первое множество точек изначальные координаты при w = 1
 Y_p_a=[]
 
-X_p_b=[] #Второе множество точек
+X_p_b=[] #Второе множество точек изначальные координаты при w = 1
 Y_p_b=[]
 
 K = 0 # Количество точек мн-ва а на окружности
 M = 0 # Количество точек мн-ва b внутри окружности
 Q = 0 # Количество точек мн-ва а внутри окружности
+
+X_m_a=[] #Первое множество точек координаты после масштабирования
+Y_m_a=[]
+
+X_m_b=[] #Второе множество точек координаты после масштабирования
+Y_m_b=[]
+
+X_m_a_buf=[] #Первое множество точек координаты после масштабирования
+Y_m_a_buf=[]
+
+X_m_b_buf=[] #Второе множество точек координаты после масштабирования
+Y_m_a_buf=[]
+
+
+
+Xm = 0 #Координаты центра масштабирования
+Ym = 0
+
+K_p = 0.5 # Коэфициент масштабирования
+K_m = 1.5
+
+w = 2; # Коэфициент убывания (возратания) коэфициентa масштабирования)))
 
 last_move = 0
 del_flag = "a"
@@ -164,6 +186,63 @@ def paint_b(event):
         Y_p_b.append(y1)
         but9.config(state = NORMAL)
 
+def zoom_minus(event):
+    xm = event.x
+    ym = event.y
+    global last_move
+    if (len(X_p_a) != 0):
+        X_p_a.pop(len(X_p_a) - 1)
+        Y_p_a.pop(len(X_p_a) - 1)
+        cvs.delete(last_move)
+
+    global K_m
+
+    global X_m_a
+    global Y_m_a
+    if (len(X_m_a) == 0):
+        X_m_a = X_p_a
+        Y_m_a = Y_p_a
+
+    for i in range(0, len(X_m_a)):
+        X_m_a[i] = (K_m * X_m_a[i] + (1 - K_m) * xm)
+        Y_m_a[i] = (K_m * Y_m_a[i] + (1 - K_m) * ym)
+
+    cvs.delete("all")
+
+    for i in range(0, len(X_m_a)):
+        if ((X_m_a[i] - 5 >= 0) and (X_m_a[i] + 5 <= 1500) and (Y_m_a[i] - 5 >= 0) and (Y_m_a[i] + 5 <= 900)):
+            last_move = cvs.create_oval(X_m_a[i]-5,Y_m_a[i]-5,X_m_a[i]+5,Y_m_a[i]+5,fill = "#FF69B4")
+
+
+def zoom_plus(event):
+    xm = event.x
+    ym = event.y
+    global last_move
+    if (len(X_p_b) != 0):
+        X_p_b.pop(len(X_p_b) - 1)
+        Y_p_b.pop(len(X_p_b) - 1)
+        cvs.delete(last_move)
+
+    global K_p
+
+    global X_m_a
+    global Y_m_a
+    if (len(X_m_a) == 0):
+        X_m_a = X_p_a
+        Y_m_a = Y_p_a
+
+    
+    for i in range(0, len(X_m_a)):
+        X_m_a[i] = (K_p * X_m_a[i] + (1 - K_p) * xm)
+        Y_m_a[i] = (K_p * Y_m_a[i] + (1 - K_p) * ym)
+
+    cvs.delete("all")
+
+    for i in range(0, len(X_m_a)):
+        if ((X_m_a[i] - 5 >= 0) and (X_m_a[i] + 5 <= 1500) and (Y_m_a[i] - 5 >= 0) and (Y_m_a[i] + 5 <= 900)):
+            last_move = cvs.create_oval(X_m_a[i]-5,Y_m_a[i]-5,X_m_a[i]+5,Y_m_a[i]+5,fill = "#FF69B4")
+
+
 
 def Mouse():
     global last_move
@@ -172,14 +251,37 @@ def Mouse():
     but6.config(state = NORMAL)
     but7.config(state = NORMAL)
 
+    cvs.bind('<Double-Button-1>', zoom_minus)
+    cvs.bind('<Double-Button-3>', zoom_plus)
     cvs.bind('<Button-1>', paint_a)
     cvs.bind('<Button-3>', paint_b)
+
+def info_task():
+    F = box.showinfo(title='О программе', message =
+    '''
+    Вариант №14
+    Даны два множества точек на плоскости. Найти центр и радиус окружности, проходящей через k точек первого множества и содержащей строго внутри себя m точек второго множества и q точек первого.
+    ''')
+
+def info_auther():
+    F = box.showinfo(title='Об авторе', message =
+    '''
+    Ляпина Наталья ИУ7-42Б
+    Вариант №14
+    Могу рассказать анекдот
+    ''')
 
 
 window = Tk()
 window.geometry('1200x600')
 window.resizable(width=False, height=False) # Запрет разворота окна
-window.title("Параметры")
+window.title("Задача №1")
+
+mainmenu = Menu(window)
+window.config(menu=mainmenu)
+mainmenu.add_command(label='О программе',command = info_task)
+mainmenu.add_command(label='Об авторе',command = info_auther)
+
 
 cvs = Canvas (window, width = 1000, height = 600, bg = "lightblue")
 cvs.place(x = 0, y = 0)
