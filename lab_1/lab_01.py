@@ -511,6 +511,93 @@ def info_auther():
     Могу рассказать анекдот
     ''')
 
+def check_points(x_1, y_1, x_2, y_2, x_3, y_3):
+    a = sqrt((x_1 - x_2)**2 + (y_1 - y_2)**2)
+    b = sqrt((x_2 - x_3)**2 + (y_2 - y_3)**2)
+    c = sqrt((x_3 - x_1)**2 + (y_3 - y_1)**2)
+    p = (a + b + c) / 2
+    global x_c
+    global y_c
+    global R
+    try:
+        S_tr = sqrt(p*(p-a)*(p-b)*(p-c))
+        R = (a*b*c)/(4*S_tr)
+        A = x_2 - x_1
+        B = y_2 - y_1
+        C = x_3 - x_1
+        D = y_3 - y_1
+        E = A * (x_1 + x_2) + B * (y_1 + y_2)
+        F = C * (x_1 + x_3) + D * (y_1 + y_3)
+        G = 2 * (A * (y_3 - y_2) - B * (x_3 - x_2))
+        x_c = (D * E - B * F) / G
+        y_c = (A * F - C * E) / G
+        print("LOL")
+        if ((x_3 - x_1) / (x_2 - x_1)) == ((y_3 - y_1)/ (y_2 - y_1)):
+            R = 100000
+            return 0
+    except ZeroDivisionError:
+        R = 10000
+        return 0
+    k_count = 3
+    R = floor(R)
+    x_c = floor(x_c)
+    y_c = floor(y_c)
+    for i in range(0, len(X_p_a)):
+        if ((X_p_a[i] != x_1 and Y_p_a[i] != y_1) and (X_p_a[i] != x_2 and Y_p_a[i] != y_2) and (Y_p_a[i] != y_3 and X_p_a[i] != x_3)):
+            if ((X_p_a[i] - x_c)**2 + (Y_p_a[i] - y_c) **2) <= (R+2)**2 and ((X_p_a[i] - x_c)**2 + (Y_p_a[i] - y_c) **2) >= (R - 2)**2:
+                k_count+=1
+    print(k_count)
+    if (k_count != K):
+        R = 100000
+        return 0
+    m_count = 0
+    for i in range(0, len(X_p_b)):
+        if ((X_p_b[i] - x_c)**2 + (Y_p_b[i] - y_c)**2) < R**2:
+            m_count+=1
+    print(m_count)
+    if (m_count != M):
+        R = 100000
+        return 0
+
+    q_count = 0
+    for i in range(0, len(X_p_a)):
+        if ((X_p_a[i] - x_c)**2 + (Y_p_a[i] - y_c)**2) < (R - 2)**2:
+            q_count+=1
+    print(q_count)
+    if (q_count != Q):
+        R = 10000
+        return 0
+    print(R, x_c, y_c)
+    print("LOL")
+    return 1
+
+
+
+D = [0,0,0,0,0,0]
+def combinations():
+    global R
+    R = 100000
+    for i in range(0, len(X_p_a)):
+        for j in range(i + 1, len(X_p_a)):
+            for k in range(j + 1, len(X_p_a)):
+                if (check_points(X_p_a[i], Y_p_a[i], X_p_a[j], Y_p_a[j], X_p_a[k], Y_p_a[k]) == 1):
+                    D[0] = X_p_a[i]
+                    D[1] = Y_p_a[i]
+                    D[2] = X_p_a[j]
+                    D[3] = Y_p_a[j]
+                    D[4] = X_p_a[k]
+                    D[5] = Y_p_a[k]
+                    return
+
+def task_func():
+    combinations()
+    print("HUI", R)
+    if (R < 100000):
+        d = 2*(D[0]*(D[3]-D[5])+D[2]*(D[5]-D[1])+D[4]*(D[1]-D[3]))
+        ux = ((D[0]*D[0]+D[1]*D[1])*(D[3]-D[5])+(D[2]*D[2]+D[3]*D[3])*(D[5]-D[1])+(D[4]*D[4]+D[5]*D[5])*(D[1]-D[3]))/d
+        uy = ((D[0]*D[0]+D[1]*D[1])*(D[4]-D[2])+(D[2]*D[2]+D[3]*D[3])*(D[0]-D[4])+(D[4]*D[4]+D[5]*D[5])*(D[2]-D[0]))/d
+        cvs.create_oval(ux-R,uy-R,ux+R,uy+R)
+
 window = Tk()
 window.geometry('1200x600')
 window.resizable(width=False, height=False) # Запрет разворота окна
@@ -573,7 +660,7 @@ en5.place(x = 1030, y = 423)
 but7 = Button(window, state = DISABLED, text = "ОК", command = add_q)
 but7.place(x = 1160, y = 420)
 
-but8 = Button(window, state = DISABLED, text = " Окончить ввод ")
+but8 = Button(window, state = NORMAL, text = " Окончить ввод ", command = task_func)
 but8.place(x = 1050, y = 450)
 
 but9 = Button(window, state = DISABLED, text = " Отменить действие ", command = delite_move)
