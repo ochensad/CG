@@ -51,7 +51,7 @@ def points_b():
             else:
                 x += sym
         else:
-            if sym not in nums:
+            if sym not in nums and sym != ' ':
                 F = box.showerror("Ошибка","Недопустимые символы")
                 en2.delete(0, END)
                 return
@@ -72,6 +72,7 @@ def points_b():
     Flag_arr.append("b")
     en2.delete(0, END)
     but9.config(state = NORMAL)
+    but11.config(state = NORMAL)
 
 def points_a():
     x = ''
@@ -88,7 +89,7 @@ def points_a():
             else:
                 x += sym
         else:
-            if sym not in nums:
+            if sym not in nums and sym != ' ':
                 F = box.showerror("Ошибка","Недопустимые символы")
                 en1.delete(0, END)
                 return
@@ -109,6 +110,7 @@ def points_a():
     Flag_arr.append("a")
     en1.delete(0, END)
     but9.config(state = NORMAL)
+    but11.config(state = NORMAL)
 
 def delite_move():
     del_flag = ""
@@ -210,6 +212,7 @@ def paint_a(event):
         X_p_a.append(x1)
         Y_p_a.append(y1)
         but9.config(state = NORMAL)
+        but11.config(state = NORMAL)
 
 def paint_b(event):
     x1 = event.x
@@ -222,6 +225,7 @@ def paint_b(event):
         X_p_b.append(x1)
         Y_p_b.append(y1)
         but9.config(state = NORMAL)
+        but11.config(state = NORMAL)
 
 def zoom_minus(event):
     xm = event.x
@@ -335,6 +339,151 @@ def zoom():
     cvs.bind('<Button-1>', fake_func)
     cvs.bind('<Button-3>', fake_func)
 
+def edit(event):
+    x = event.x
+    y = event.y
+
+    global find_i
+    global en1_2
+
+    find_i = -1
+    for i in range(0, len(X_p_a)):
+        if (x > X_p_a[i] - 3 and x < X_p_a[i] + 3) and (y > Y_p_a[i] - 3 and y < Y_p_a[i] + 3):
+            find_i = i
+
+    if (find_i != -1):
+        cvs.create_oval(X_p_a[find_i]-5,Y_p_a[find_i]-5,X_p_a[find_i]+5,Y_p_a[find_i]+5,fill = "#FFFF00")
+        cvs.bind('<Button-1>', fake_func)
+        window_2 = Tk()
+        window_2.geometry('300x150')
+        window_2.resizable(width=False, height=False)
+        window_2.title("Редактирование точки")
+
+        name1_2 = Label(window_2, text = "Редактирование координат", relief = "solid", bg = "#FFFFFF")
+        name1_2.place(x = 70, y = 15)
+        name2_2 = Label(window_2, text = "x y:")
+        name2_2.place(x = 40, y = 50)
+        en1_2 = Entry(window_2)
+        en1_2.place(x = 60, y = 50)
+        but3_2 = Button(window_2, text = "ОК", command = new_point_a)
+        but3_2.place(x = 200, y = 48)
+        but4_2 = Button(window_2, text = "Удалить точку", command = del_point_a)
+        but4_2.place(x = 100, y = 90)
+        window_2.mainloop()
+        return
+
+    for i in range(0, len(X_p_b)):
+        if (x > X_p_b[i] - 3 and x < X_p_b[i] + 3) and (y > Y_p_b[i] - 3 and y < Y_p_b[i] + 3):
+            find_i = i
+
+    if (find_i != -1):
+        cvs.create_oval(X_p_b[find_i]-5,Y_p_b[find_i]-5,X_p_b[find_i]+5,Y_p_b[find_i]+5,fill = "#FFFF00")
+        cvs.bind('<Button-1>', fake_func)
+        window_2 = Tk()
+        window_2.geometry('300x150')
+        window_2.resizable(width=False, height=False)
+        window_2.title("Редактирование точки")
+
+        name1_2 = Label(window_2, text = "Редактирование координат", relief = "solid", bg = "#FFFFFF")
+        name1_2.place(x = 70, y = 15)
+        name2_2 = Label(window_2, text = "x y:")
+        name2_2.place(x = 40, y = 50)
+        en1_2 = Entry(window_2)
+        en1_2.place(x = 60, y = 50)
+        but3_2 = Button(window_2, text = "ОК", command = new_point_b)
+        but3_2.place(x = 200, y = 48)
+        but4_2 = Button(window_2, text = "Удалить точку", command = del_point_b)
+        but4_2.place(x = 100, y = 90)
+        window_2.mainloop()
+
+
+
+def del_point_a():
+    F = box.showerror("Внимание","Действие необратимо")
+    X_p_a.pop(find_i)
+    Y_p_a.pop(find_i)
+    cancel_zoom()
+
+def del_point_b():
+    F = box.showerror("Внимание","Действие необратимо")
+    X_p_b.pop(find_i)
+    Y_p_b.pop(find_i)
+    cancel_zoom()
+
+def new_point_a():
+    x = ''
+    y = ''
+    flag = 0
+    for sym in en1_2.get():
+        if sym == ' ':
+            flag = 1
+        if flag == 0:
+            if sym not in nums:
+                F = box.showerror("Ошибка","Недопустимые символы")
+                en1_2.delete(0, END)
+                return
+            else:
+                x += sym
+        else:
+            if sym not in nums and sym != ' ':
+                F = box.showerror("Ошибка","Недопустимые символы")
+                en1_2.delete(0, END)
+                return
+            else:
+                y += sym
+    if (x == '' or y == ''):
+        F = box.showerror("Ошибка","Недостаточно данных")
+        return 0
+    x = int(x)
+    y = int(y)
+    X_p_a[find_i] = x
+    Y_p_a[find_i] = y
+    cancel_zoom()
+    en1_2.delete(0, END)
+
+def new_point_b():
+    x = ''
+    y = ''
+    flag = 0
+    for sym in en1_2.get():
+        if sym == ' ':
+            flag = 1
+        if flag == 0:
+            if sym not in nums:
+                F = box.showerror("Ошибка","Недопустимые символы")
+                en1_2.delete(0, END)
+                return
+            else:
+                x += sym
+        else:
+            if sym not in nums and sym != ' ':
+                F = box.showerror("Ошибка","Недопустимые символы")
+                en1_2.delete(0, END)
+                return
+            else:
+                y += sym
+    if (x == '' or y == ''):
+        F = box.showerror("Ошибка","Недостаточно данных")
+        return 0
+    x = int(x)
+    y = int(y)
+    X_p_b[find_i] = x
+    Y_p_b[find_i] = y
+    cancel_zoom()
+    en1_2.delete(0, END)
+
+def Edit_points():
+    but3.config(state = DISABLED)
+    but4.config(state = DISABLED)
+    but5.config(state = DISABLED)
+    but6.config(state = DISABLED)
+    but7.config(state = DISABLED)
+    but8.config(state = DISABLED)
+    but9.config(state = DISABLED)
+    but10.config(state = DISABLED)
+
+    cvs.bind('<Button-1>', edit)
+
 def Mouse():
     cancel_zoom()
     but3.config(state = DISABLED)
@@ -361,7 +510,6 @@ def info_auther():
     Вариант №14
     Могу рассказать анекдот
     ''')
-
 
 window = Tk()
 window.geometry('1200x600')
@@ -434,7 +582,7 @@ but9.place(x = 1040, y = 485)
 but10 = Button(window, state = DISABLED, text = " Масштабирование ", command = zoom)
 but10.place(x = 1040, y = 520)
 
-but11 = Button(window, state = DISABLED, text = " Режим редактирования ", command = zoom)
+but11 = Button(window, state = DISABLED, text = " Режим редактирования ", command = Edit_points)
 but11.place(x = 1030, y = 555)
 
 window.mainloop()	
