@@ -19,13 +19,6 @@ Y_m_a=[]
 X_m_b=[] #Второе множество точек координаты после масштабирования
 Y_m_b=[]
 
-X_m_a_buf=[] #Первое множество точек координаты после масштабирования
-Y_m_a_buf=[]
-
-X_m_b_buf=[] #Второе множество точек координаты после масштабирования
-Y_m_a_buf=[]
-
-
 
 Xm = 0 #Координаты центра масштабирования
 Ym = 0
@@ -33,22 +26,37 @@ Ym = 0
 K_p = 0.5 # Коэфициент масштабирования
 K_m = 1.5
 
-w = 2; # Коэфициент убывания (возратания) коэфициентa масштабирования)))
 
 last_move = 0
-del_flag = "a"
+A_moves = [] # Массив действий над множеством а
+B_moves = [] # Массив действий над множеством b
+Flag_arr = [] # Массив del_flag-ов
+
+nums = ['1', '2', '3', '4', '5', '6', '7','8','9','0']
+
 
 def points_b():
     x = ''
     y = ''
     flag = 0
+    global nums
     for sym in en2.get():
         if sym == ' ':
             flag = 1
         if flag == 0:
-            x += sym
+            if sym not in nums:
+                F = box.showerror("Ошибка","Недопустимые символы")
+                en2.delete(0, END)
+                return
+            else:
+                x += sym
         else:
-            y += sym
+            if sym not in nums:
+                F = box.showerror("Ошибка","Недопустимые символы")
+                en2.delete(0, END)
+                return
+            else:
+                y += sym
     if (x == '' or y == ''):
     	F = box.showerror("Ошибка","Недостаточно данных")
     	return 0
@@ -60,6 +68,8 @@ def points_b():
     global del_flag
     del_flag = "b"
     last_move = cvs.create_oval(X_p_b[len(X_p_b) - 1]-5,Y_p_b[len(Y_p_b)-1]-5,X_p_b[len(X_p_b)-1]+5,Y_p_b[len(Y_p_b) - 1]+5,fill = "#00FF00")
+    B_moves.append(last_move)
+    Flag_arr.append("b")
     en2.delete(0, END)
     but9.config(state = NORMAL)
 
@@ -71,9 +81,19 @@ def points_a():
         if sym == ' ':
             flag = 1
         if flag == 0:
-            x += sym
+            if sym not in nums:
+                F = box.showerror("Ошибка","Недопустимые символы")
+                en1.delete(0, END)
+                return
+            else:
+                x += sym
         else:
-            y += sym
+            if sym not in nums:
+                F = box.showerror("Ошибка","Недопустимые символы")
+                en1.delete(0, END)
+                return
+            else:
+                y += sym
     if (x == '' or y == ''):
     	F = box.showerror("Ошибка","Недостаточно данных")
     	return 0
@@ -85,53 +105,66 @@ def points_a():
     global del_flag
     del_flag = "a"
     last_move = cvs.create_oval(X_p_a[len(X_p_a) - 1]-5,Y_p_a[len(Y_p_a)-1]-5,X_p_a[len(X_p_a)-1]+5,Y_p_a[len(Y_p_a) - 1]+5,fill = "#FF69B4")
+    A_moves.append(last_move)
+    Flag_arr.append("a")
     en1.delete(0, END)
     but9.config(state = NORMAL)
 
 def delite_move():
-	global del_flag
-	cvs.delete(last_move)
-	if (del_flag == "b"):
-		X_p_b.pop(-1)
-		Y_p_b.pop(-1)
-	elif (del_flag == "a"):
-		X_p_a.pop(-1)
-		Y_p_a.pop(-1)
-	del_flag = "nope"
+    del_flag = ""
+    global Flag_arr
+    if (len(Flag_arr) != 0):
+        del_flag = Flag_arr[-1]
+        Flag_arr.pop(-1)
+    else:
+        del_flag = "nope"
+
+    if (del_flag == "b"):
+        cvs.delete(B_moves[-1])
+        B_moves.pop(-1)
+        X_p_b.pop(-1)
+        Y_p_b.pop(-1)
+    elif (del_flag == "a"):
+        cvs.delete(A_moves[-1])
+        A_moves.pop(-1)
+        X_p_a.pop(-1)
+        Y_p_a.pop(-1)
+
+    del_flag = "nope"
 
 def add_k():
     x = ''
-    y = ''
     flag = 0
     for sym in en3.get():
-        if sym == ' ':
-            flag = 1
-        if flag == 0:
-            x += sym
-        else:
-            y += sym
-    if (x == '' or y != ''):
+        if sym not in nums:
+            F = box.showerror("Ошибка","Недопустимые символы")
+            en3.delete(0, END)
+            return
+        x += sym
+    if (x == ''):
     	F = box.showerror("Ошибка","Недостаточно данных")
     	return 0
     x = int(x)
+    if (x < 3):
+        F = box.showerror("Ошибка","Для окружности нужны минимум 3 точки")
+        en3.delete(0, END)
+        return
     global K
     K = x;
     en3.delete(0, END)
 
 def add_m():
     x = ''
-    y = ''
     flag = 0
     for sym in en4.get():
-        if sym == ' ':
-            flag = 1
-        if flag == 0:
-            x += sym
-        else:
-            y += sym
-    if (x == '' or y != ''):
-    	F = box.showerror("Ошибка","Недостаточно данных")
-    	return 0
+        if sym not in nums:
+            F = box.showerror("Ошибка","Недопустимые символы")
+            en4.delete(0, END)
+            return
+        x += sym
+    if (x == ''):
+        F = box.showerror("Ошибка","Недостаточно данных")
+        return 0
     x = int(x)
     global M
     M = x;
@@ -139,18 +172,16 @@ def add_m():
 
 def add_q():
     x = ''
-    y = ''
     flag = 0
     for sym in en5.get():
-        if sym == ' ':
-            flag = 1
-        if flag == 0:
-            x += sym
-        else:
-            y += sym
-    if (x == '' or y != ''):
-    	F = box.showerror("Ошибка","Недостаточно данных")
-    	return 0
+        if sym not in nums:
+            F = box.showerror("Ошибка","Недопустимые символы")
+            en5.delete(0, END)
+            return
+        x += sym
+    if (x == ''):
+        F = box.showerror("Ошибка","Недостаточно данных")
+        return 0
     x = int(x)
     global Q
     Q = x;
@@ -158,12 +189,14 @@ def add_q():
 
 
 def Keyboard():
-    but2.config(state = DISABLED)
+    cancel_zoom()
+    #but2.config(state = DISABLED)
     but3.config(state = NORMAL)
     but4.config(state = NORMAL)
     but5.config(state = NORMAL)
     but6.config(state = NORMAL)
     but7.config(state = NORMAL)
+    but10.config(state = NORMAL)
 
 
 def paint_a(event):
@@ -172,6 +205,8 @@ def paint_a(event):
     global last_move
     if ((x1 - 5 >= 0) and (x1 + 5 <= 1500) and (y1 - 5 >= 0) and (y1 + 5 <= 900)):
         last_move = cvs.create_oval(x1-5,y1-5,x1+5,y1+5,fill = "#FF69B4")
+        A_moves.append(last_move)
+        Flag_arr.append("a")
         X_p_a.append(x1)
         Y_p_a.append(y1)
         but9.config(state = NORMAL)
@@ -182,6 +217,8 @@ def paint_b(event):
     global last_move
     if ((x1 - 5 >= 0) and (x1 + 5 <= 1500) and (y1 - 5 >= 0) and (y1 + 5 <= 900)):
         last_move = cvs.create_oval(x1-5,y1-5,x1+5,y1+5,fill = "#00FF00")
+        B_moves.append(last_move)
+        Flag_arr.append("b")
         X_p_b.append(x1)
         Y_p_b.append(y1)
         but9.config(state = NORMAL)
@@ -189,19 +226,14 @@ def paint_b(event):
 def zoom_minus(event):
     xm = event.x
     ym = event.y
-    global last_move
-    if (len(X_p_a) != 0):
-        X_p_a.pop(len(X_p_a) - 1)
-        Y_p_a.pop(len(X_p_a) - 1)
-        cvs.delete(last_move)
 
     global K_m
 
     global X_m_a
     global Y_m_a
     if (len(X_m_a) == 0):
-        X_m_a = X_p_a
-        Y_m_a = Y_p_a
+        X_m_a = X_p_a.copy()
+        Y_m_a = Y_p_a.copy()
 
     for i in range(0, len(X_m_a)):
         X_m_a[i] = (K_m * X_m_a[i] + (1 - K_m) * xm)
@@ -211,27 +243,35 @@ def zoom_minus(event):
 
     for i in range(0, len(X_m_a)):
         if ((X_m_a[i] - 5 >= 0) and (X_m_a[i] + 5 <= 1500) and (Y_m_a[i] - 5 >= 0) and (Y_m_a[i] + 5 <= 900)):
-            last_move = cvs.create_oval(X_m_a[i]-5,Y_m_a[i]-5,X_m_a[i]+5,Y_m_a[i]+5,fill = "#FF69B4")
+            cvs.create_oval(X_m_a[i]-5,Y_m_a[i]-5,X_m_a[i]+5,Y_m_a[i]+5, fill = "#FF69B4")
 
+    global X_m_b
+    global Y_m_b
+    if (len(X_m_b) == 0):
+        X_m_b = X_p_b.copy()
+        Y_m_b = Y_p_b.copy()
+
+    for i in range(0, len(X_m_b)):
+        X_m_b[i] = (K_m * X_m_b[i] + (1 - K_m) * xm)
+        Y_m_b[i] = (K_m * Y_m_b[i] + (1 - K_m) * ym)
+
+
+    for i in range(0, len(X_m_b)):
+        if ((X_m_b[i] - 5 >= 0) and (X_m_b[i] + 5 <= 1500) and (Y_m_b[i] - 5 >= 0) and (Y_m_b[i] + 5 <= 900)):
+            cvs.create_oval(X_m_b[i]-5,Y_m_b[i]-5,X_m_b[i]+5,Y_m_b[i]+5, fill = "#00FF00")
 
 def zoom_plus(event):
     xm = event.x
     ym = event.y
-    global last_move
-    if (len(X_p_b) != 0):
-        X_p_b.pop(len(X_p_b) - 1)
-        Y_p_b.pop(len(X_p_b) - 1)
-        cvs.delete(last_move)
 
     global K_p
 
     global X_m_a
     global Y_m_a
     if (len(X_m_a) == 0):
-        X_m_a = X_p_a
-        Y_m_a = Y_p_a
+        X_m_a = X_p_a.copy()
+        Y_m_a = Y_p_a.copy()
 
-    
     for i in range(0, len(X_m_a)):
         X_m_a[i] = (K_p * X_m_a[i] + (1 - K_p) * xm)
         Y_m_a[i] = (K_p * Y_m_a[i] + (1 - K_p) * ym)
@@ -240,19 +280,70 @@ def zoom_plus(event):
 
     for i in range(0, len(X_m_a)):
         if ((X_m_a[i] - 5 >= 0) and (X_m_a[i] + 5 <= 1500) and (Y_m_a[i] - 5 >= 0) and (Y_m_a[i] + 5 <= 900)):
-            last_move = cvs.create_oval(X_m_a[i]-5,Y_m_a[i]-5,X_m_a[i]+5,Y_m_a[i]+5,fill = "#FF69B4")
+            cvs.create_oval(X_m_a[i]-5,Y_m_a[i]-5,X_m_a[i]+5,Y_m_a[i]+5,fill = "#FF69B4")
 
+    global X_m_b
+    global Y_m_b
+    if (len(X_m_b) == 0):
+        X_m_b = X_p_b.copy()
+        Y_m_b = Y_p_b.copy()
 
+    for i in range(0, len(X_m_b)):
+        X_m_b[i] = (K_p * X_m_b[i] + (1 - K_p) * xm)
+        Y_m_b[i] = (K_p * Y_m_b[i] + (1 - K_p) * ym)
 
-def Mouse():
-    global last_move
-    but1.config(state = DISABLED)
-    but5.config(state = NORMAL)
-    but6.config(state = NORMAL)
-    but7.config(state = NORMAL)
+    for i in range(0, len(X_m_b)):
+        if ((X_m_b[i] - 5 >= 0) and (X_m_b[i] + 5 <= 1500) and (Y_m_b[i] - 5 >= 0) and (Y_m_b[i] + 5 <= 900)):
+            cvs.create_oval(X_m_b[i]-5,Y_m_b[i]-5,X_m_b[i]+5,Y_m_b[i]+5,fill = "#00FF00")
+
+def cancel_zoom():
+    cvs.delete("all")
+    global X_p_b
+    global Y_p_b
+
+    for i in range(0, len(X_p_b)):
+        if ((X_p_b[i] - 5 >= 0) and (X_p_b[i] + 5 <= 1500) and (Y_p_b[i] - 5 >= 0) and (Y_p_b[i] + 5 <= 900)):
+            cvs.create_oval(X_p_b[i]-5,Y_p_b[i]-5,X_p_b[i]+5,Y_p_b[i]+5,fill = "#00FF00")
+
+    global X_m_b
+    global Y_m_b
+    if (len(X_m_b) != 0):
+        X_m_b = []
+        Y_m_b = []
+    global X_p_a
+    global Y_p_a
+
+    for i in range(0, len(X_p_a)):
+        if ((X_p_a[i] - 5 >= 0) and (X_p_a[i] + 5 <= 1500) and (Y_p_a[i] - 5 >= 0) and (Y_p_a[i] + 5 <= 900)):
+            cvs.create_oval(X_p_a[i]-5,Y_p_a[i]-5,X_p_a[i]+5,Y_p_a[i]+5,fill = "#FF69B4")
+
+    global X_m_a
+    global Y_m_a
+
+    if (len(X_m_a) != 0):
+        X_m_a = []
+        Y_m_a = []
+
+def fake_func(event):
+    return
+def zoom():
+    but3.config(state = DISABLED)
+    but4.config(state = DISABLED)
 
     cvs.bind('<Double-Button-1>', zoom_minus)
     cvs.bind('<Double-Button-3>', zoom_plus)
+    cvs.bind('<Button-1>', fake_func)
+    cvs.bind('<Button-3>', fake_func)
+
+def Mouse():
+    cancel_zoom()
+    but3.config(state = DISABLED)
+    but4.config(state = DISABLED)
+    but5.config(state = NORMAL)
+    but6.config(state = NORMAL)
+    but7.config(state = NORMAL)
+    but10.config(state = NORMAL)
+
     cvs.bind('<Button-1>', paint_a)
     cvs.bind('<Button-3>', paint_b)
 
@@ -312,32 +403,38 @@ but4 = Button(window, state = DISABLED, text = "ОК", command = points_b)
 but4.place(x = 1160, y = 230)
 
 name6 = Label(window, text = "Данные для задачи", relief = "solid", bg = "#FFFF00")
-name6.place(x = 1040, y = 280)
+name6.place(x = 1040, y = 270)
 name7 = Label(window, text = "Введите значение k:")
-name7.place(x = 1020, y = 310)
+name7.place(x = 1020, y = 300)
 en3 = Entry(window)
-en3.place(x = 1030, y = 333)
+en3.place(x = 1030, y = 323)
 but5 = Button(window, state = DISABLED, text = "ОК", command = add_k)
-but5.place(x = 1160, y = 330)
+but5.place(x = 1160, y = 320)
 
 name8 = Label(window, text = "Введите значение m:")
-name8.place(x = 1020, y = 360)
+name8.place(x = 1020, y = 350)
 en4 = Entry(window)
-en4.place(x = 1030, y = 383)
+en4.place(x = 1030, y = 373)
 but6 = Button(window, state = DISABLED, text = "ОК", command = add_m)
-but6.place(x = 1160, y = 380)
+but6.place(x = 1160, y = 370)
 
 name9 = Label(window, text = "Введите значение q:")
-name9.place(x = 1020, y = 410)
+name9.place(x = 1020, y = 400)
 en5 = Entry(window)
-en5.place(x = 1030, y = 433)
+en5.place(x = 1030, y = 423)
 but7 = Button(window, state = DISABLED, text = "ОК", command = add_q)
-but7.place(x = 1160, y = 430)
+but7.place(x = 1160, y = 420)
 
 but8 = Button(window, state = DISABLED, text = " Окончить ввод ")
-but8.place(x = 1050, y = 470)
+but8.place(x = 1050, y = 450)
 
 but9 = Button(window, state = DISABLED, text = " Отменить действие ", command = delite_move)
-but9.place(x = 1040, y = 510)
+but9.place(x = 1040, y = 485)
+
+but10 = Button(window, state = DISABLED, text = " Масштабирование ", command = zoom)
+but10.place(x = 1040, y = 520)
+
+but11 = Button(window, state = DISABLED, text = " Режим редактирования ", command = zoom)
+but11.place(x = 1030, y = 555)
 
 window.mainloop()	
