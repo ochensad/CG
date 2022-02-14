@@ -531,7 +531,7 @@ def check_points(x_1, y_1, x_2, y_2, x_3, y_3):
         G = 2 * (A * (y_3 - y_2) - B * (x_3 - x_2))
         x_c = (D * E - B * F) / G
         y_c = (A * F - C * E) / G
-        print("LOL")
+
         if ((x_3 - x_1) / (x_2 - x_1)) == ((y_3 - y_1)/ (y_2 - y_1)):
             R = 100000
             return 0
@@ -546,7 +546,7 @@ def check_points(x_1, y_1, x_2, y_2, x_3, y_3):
         if ((X_p_a[i] != x_1 and Y_p_a[i] != y_1) and (X_p_a[i] != x_2 and Y_p_a[i] != y_2) and (Y_p_a[i] != y_3 and X_p_a[i] != x_3)):
             if ((X_p_a[i] - x_c)**2 + (Y_p_a[i] - y_c) **2) <= (R+2)**2 and ((X_p_a[i] - x_c)**2 + (Y_p_a[i] - y_c) **2) >= (R - 2)**2:
                 k_count+=1
-    print(k_count)
+
     if (k_count != K):
         R = 100000
         return 0
@@ -554,7 +554,7 @@ def check_points(x_1, y_1, x_2, y_2, x_3, y_3):
     for i in range(0, len(X_p_b)):
         if ((X_p_b[i] - x_c)**2 + (Y_p_b[i] - y_c)**2) < R**2:
             m_count+=1
-    print(m_count)
+
     if (m_count != M):
         R = 100000
         return 0
@@ -563,12 +563,11 @@ def check_points(x_1, y_1, x_2, y_2, x_3, y_3):
     for i in range(0, len(X_p_a)):
         if ((X_p_a[i] - x_c)**2 + (Y_p_a[i] - y_c)**2) < (R - 2)**2:
             q_count+=1
-    print(q_count)
+
     if (q_count != Q):
         R = 10000
         return 0
-    print(R, x_c, y_c)
-    print("LOL")
+
     return 1
 
 
@@ -591,7 +590,6 @@ def combinations():
 
 def task_func():
     combinations()
-    print("HUI", R)
     if (R < 100000):
         d = 2*(D[0]*(D[3]-D[5])+D[2]*(D[5]-D[1])+D[4]*(D[1]-D[3]))
         ux = ((D[0]*D[0]+D[1]*D[1])*(D[3]-D[5])+(D[2]*D[2]+D[3]*D[3])*(D[5]-D[1])+(D[4]*D[4]+D[5]*D[5])*(D[1]-D[3]))/d
