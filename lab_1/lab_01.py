@@ -3,10 +3,10 @@ import tkinter.messagebox as box
 import numpy as np
 from math import *
 
-X_p_a=[] #Первое множество точек изначальные координаты при w = 1
+X_p_a=[] #Первое множество точек изначальные координаты
 Y_p_a=[]
 
-X_p_b=[] #Второе множество точек изначальные координаты при w = 1
+X_p_b=[] #Второе множество точек изначальные координаты
 Y_p_b=[]
 
 K = 0 # Количество точек мн-ва а на окружности
@@ -19,15 +19,10 @@ Y_m_a=[]
 X_m_b=[] #Второе множество точек координаты после масштабирования
 Y_m_b=[]
 
-
-Xm = 0 #Координаты центра масштабирования
-Ym = 0
-
-K_p = 0.5 # Коэфициент масштабирования
+K_p = 0.5 # Коэфициенты масштабирования
 K_m = 1.5
 
 
-last_move = 0
 A_moves = [] # Массив действий над множеством а
 B_moves = [] # Массив действий над множеством b
 Flag_arr = [] # Массив del_flag-ов
@@ -64,9 +59,7 @@ def points_b():
     y = int(y)
     X_p_b.append(x)
     Y_p_b.append(y)
-    global last_move
-    global del_flag
-    del_flag = "b"
+
     last_move = cvs.create_oval(X_p_b[len(X_p_b) - 1]-5,Y_p_b[len(Y_p_b)-1]-5,X_p_b[len(X_p_b)-1]+5,Y_p_b[len(Y_p_b) - 1]+5,fill = "#00FF00")
     B_moves.append(last_move)
     Flag_arr.append("b")
@@ -102,9 +95,7 @@ def points_a():
     y = int(y)
     X_p_a.append(x)
     Y_p_a.append(y)
-    global last_move
-    global del_flag
-    del_flag = "a"
+
     last_move = cvs.create_oval(X_p_a[len(X_p_a) - 1]-5,Y_p_a[len(Y_p_a)-1]-5,X_p_a[len(X_p_a)-1]+5,Y_p_a[len(Y_p_a) - 1]+5,fill = "#FF69B4")
     A_moves.append(last_move)
     Flag_arr.append("a")
@@ -131,8 +122,6 @@ def delite_move():
         A_moves.pop(-1)
         X_p_a.pop(-1)
         Y_p_a.pop(-1)
-
-    del_flag = "nope"
 
 def add_k():
     x = ''
@@ -190,21 +179,10 @@ def add_q():
     en5.delete(0, END)
 
 
-def Keyboard():
-    cancel_zoom()
-    #but2.config(state = DISABLED)
-    but3.config(state = NORMAL)
-    but4.config(state = NORMAL)
-    but5.config(state = NORMAL)
-    but6.config(state = NORMAL)
-    but7.config(state = NORMAL)
-    but10.config(state = NORMAL)
-
-
 def paint_a(event):
     x1 = event.x
     y1 = event.y
-    global last_move
+
     if ((x1 - 5 >= 0) and (x1 + 5 <= 1500) and (y1 - 5 >= 0) and (y1 + 5 <= 900)):
         last_move = cvs.create_oval(x1-5,y1-5,x1+5,y1+5,fill = "#FF69B4")
         A_moves.append(last_move)
@@ -217,7 +195,7 @@ def paint_a(event):
 def paint_b(event):
     x1 = event.x
     y1 = event.y
-    global last_move
+
     if ((x1 - 5 >= 0) and (x1 + 5 <= 1500) and (y1 - 5 >= 0) and (y1 + 5 <= 900)):
         last_move = cvs.create_oval(x1-5,y1-5,x1+5,y1+5,fill = "#00FF00")
         B_moves.append(last_move)
@@ -330,14 +308,6 @@ def cancel_zoom():
 
 def fake_func(event):
     return
-def zoom():
-    but3.config(state = DISABLED)
-    but4.config(state = DISABLED)
-
-    cvs.bind('<Double-Button-1>', zoom_minus)
-    cvs.bind('<Double-Button-3>', zoom_plus)
-    cvs.bind('<Button-1>', fake_func)
-    cvs.bind('<Button-3>', fake_func)
 
 def edit(event):
     x = event.x
@@ -399,13 +369,13 @@ def edit(event):
 
 
 def del_point_a():
-    F = box.showerror("Внимание","Действие необратимо")
+    F = box.showinfo("Внимание","Действие необратимо")
     X_p_a.pop(find_i)
     Y_p_a.pop(find_i)
     cancel_zoom()
 
 def del_point_b():
-    F = box.showerror("Внимание","Действие необратимо")
+    F = box.showinfo("Внимание","Действие необратимо")
     X_p_b.pop(find_i)
     Y_p_b.pop(find_i)
     cancel_zoom()
@@ -472,44 +442,6 @@ def new_point_b():
     cancel_zoom()
     en1_2.delete(0, END)
 
-def Edit_points():
-    but3.config(state = DISABLED)
-    but4.config(state = DISABLED)
-    but5.config(state = DISABLED)
-    but6.config(state = DISABLED)
-    but7.config(state = DISABLED)
-    but8.config(state = DISABLED)
-    but9.config(state = DISABLED)
-    but10.config(state = DISABLED)
-
-    cvs.bind('<Button-1>', edit)
-
-def Mouse():
-    cancel_zoom()
-    but3.config(state = DISABLED)
-    but4.config(state = DISABLED)
-    but5.config(state = NORMAL)
-    but6.config(state = NORMAL)
-    but7.config(state = NORMAL)
-    but10.config(state = NORMAL)
-
-    cvs.bind('<Button-1>', paint_a)
-    cvs.bind('<Button-3>', paint_b)
-
-def info_task():
-    F = box.showinfo(title='О программе', message =
-    '''
-    Вариант №14
-    Даны два множества точек на плоскости. Найти центр и радиус окружности, проходящей через k точек первого множества и содержащей строго внутри себя m точек второго множества и q точек первого.
-    ''')
-
-def info_auther():
-    F = box.showinfo(title='Об авторе', message =
-    '''
-    Ляпина Наталья ИУ7-42Б
-    Вариант №14
-    Могу рассказать анекдот
-    ''')
 
 def check_points(x_1, y_1, x_2, y_2, x_3, y_3):
     a = sqrt((x_1 - x_2)**2 + (y_1 - y_2)**2)
@@ -570,8 +502,6 @@ def check_points(x_1, y_1, x_2, y_2, x_3, y_3):
 
     return 1
 
-
-
 D = [0,0,0,0,0,0]
 def combinations():
     global R
@@ -588,13 +518,79 @@ def combinations():
                     D[5] = Y_p_a[k]
                     return
 
-def task_func():
+def Edit_points():
+    but3.config(state = DISABLED)
+    but4.config(state = DISABLED)
+    but5.config(state = DISABLED)
+    but6.config(state = DISABLED)
+    but7.config(state = DISABLED)
+    but8.config(state = DISABLED)
+    but9.config(state = DISABLED)
+    but10.config(state = DISABLED)
+
+    cvs.bind('<Button-1>', edit)
+
+
+def Keyboard():
+    cancel_zoom()
+    but3.config(state = NORMAL)
+    but4.config(state = NORMAL)
+    but5.config(state = NORMAL)
+    but6.config(state = NORMAL)
+    but7.config(state = NORMAL)
+    but8.config(state = NORMAL)
+    but10.config(state = NORMAL)
+
+def Mouse():
+    cancel_zoom()
+    but3.config(state = DISABLED)
+    but4.config(state = DISABLED)
+    but5.config(state = NORMAL)
+    but6.config(state = NORMAL)
+    but7.config(state = NORMAL)
+    but8.config(state = NORMAL)
+    but10.config(state = NORMAL)
+
+    cvs.bind('<Button-1>', paint_a)
+    cvs.bind('<Button-3>', paint_b)
+
+def Zoom():
+    but3.config(state = DISABLED)
+    but4.config(state = DISABLED)
+
+    cvs.bind('<Double-Button-1>', zoom_minus)
+    cvs.bind('<Double-Button-3>', zoom_plus)
+    cvs.bind('<Button-1>', fake_func)
+    cvs.bind('<Button-3>', fake_func)
+
+def info_task():
+    F = box.showinfo(title='О программе', message =
+    '''
+    Вариант №14
+    Даны два множества точек на плоскости. Найти центр и радиус окружности, проходящей через k точек первого множества и содержащей строго внутри себя m точек второго множества и q точек первого.
+    ''')
+
+def info_auther():
+    F = box.showinfo(title='Об авторе', message =
+    '''
+    Ляпина Наталья ИУ7-42Б
+    Вариант №14
+    Могу рассказать анекдот
+    ''')
+
+def Task_func():
     combinations()
     if (R < 100000):
         d = 2*(D[0]*(D[3]-D[5])+D[2]*(D[5]-D[1])+D[4]*(D[1]-D[3]))
         ux = ((D[0]*D[0]+D[1]*D[1])*(D[3]-D[5])+(D[2]*D[2]+D[3]*D[3])*(D[5]-D[1])+(D[4]*D[4]+D[5]*D[5])*(D[1]-D[3]))/d
         uy = ((D[0]*D[0]+D[1]*D[1])*(D[4]-D[2])+(D[2]*D[2]+D[3]*D[3])*(D[0]-D[4])+(D[4]*D[4]+D[5]*D[5])*(D[2]-D[0]))/d
         cvs.create_oval(ux-R,uy-R,ux+R,uy+R)
+        text = "Радиус окружности " + str(R) + ". Центр окружности x: " + str(x_c) + " y: " + str(y_c)
+        print(text) 
+        F = box.showinfo("Решение",text)
+
+    else:
+        F = box.showinfo("Решение","Такой окружности нет:(")
 
 window = Tk()
 window.geometry('1200x600')
@@ -658,13 +654,13 @@ en5.place(x = 1030, y = 423)
 but7 = Button(window, state = DISABLED, text = "ОК", command = add_q)
 but7.place(x = 1160, y = 420)
 
-but8 = Button(window, state = NORMAL, text = " Окончить ввод ", command = task_func)
+but8 = Button(window, state = DISABLED, text = " Окончить ввод ", command = Task_func)
 but8.place(x = 1050, y = 450)
 
 but9 = Button(window, state = DISABLED, text = " Отменить действие ", command = delite_move)
 but9.place(x = 1040, y = 485)
 
-but10 = Button(window, state = DISABLED, text = " Масштабирование ", command = zoom)
+but10 = Button(window, state = DISABLED, text = " Масштабирование ", command = Zoom)
 but10.place(x = 1040, y = 520)
 
 but11 = Button(window, state = DISABLED, text = " Режим редактирования ", command = Edit_points)
