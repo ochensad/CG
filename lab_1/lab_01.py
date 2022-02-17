@@ -29,6 +29,7 @@ Flag_arr = [] # Массив del_flag-ов
 
 nums = ['1', '2', '3', '4', '5', '6', '7','8','9','0']
 
+Text_x = []
 
 def points_b():
     x = ''
@@ -59,13 +60,15 @@ def points_b():
     y = int(y)
     X_p_b.append(x)
     Y_p_b.append(y)
-
+    listbox_b.insert(END, "x: " + str(x) + ' ' + "y: "+ str(y))
     last_move = cvs.create_oval(X_p_b[len(X_p_b) - 1]-5,Y_p_b[len(Y_p_b)-1]-5,X_p_b[len(X_p_b)-1]+5,Y_p_b[len(Y_p_b) - 1]+5,fill = "#00FF00")
     B_moves.append(last_move)
     Flag_arr.append("b")
     en2.delete(0, END)
     but9.config(state = NORMAL)
     but11.config(state = NORMAL)
+    global Text_x
+    Text_x.append("HUI")
 
 def points_a():
     x = ''
@@ -95,6 +98,7 @@ def points_a():
     y = int(y)
     X_p_a.append(x)
     Y_p_a.append(y)
+    listbox_a.insert(END, "x: " + str(x) + ' ' + "y: " + str(y))
 
     last_move = cvs.create_oval(X_p_a[len(X_p_a) - 1]-5,Y_p_a[len(Y_p_a)-1]-5,X_p_a[len(X_p_a)-1]+5,Y_p_a[len(Y_p_a) - 1]+5,fill = "#FF69B4")
     A_moves.append(last_move)
@@ -117,11 +121,13 @@ def delite_move():
         B_moves.pop(-1)
         X_p_b.pop(-1)
         Y_p_b.pop(-1)
+        listbox_b.delete(listbox_b.size() - 1)
     elif (del_flag == "a"):
         cvs.delete(A_moves[-1])
         A_moves.pop(-1)
         X_p_a.pop(-1)
         Y_p_a.pop(-1)
+        listbox_a.delete(listbox_a.size() - 1)
 
 def add_k():
     x = ''
@@ -191,6 +197,7 @@ def paint_a(event):
         Y_p_a.append(y1)
         but9.config(state = NORMAL)
         but11.config(state = NORMAL)
+        listbox_a.insert(END, "x: " + str(x1) + ' ' + "y: " + str(y1))
 
 def paint_b(event):
     x1 = event.x
@@ -204,6 +211,7 @@ def paint_b(event):
         Y_p_b.append(y1)
         but9.config(state = NORMAL)
         but11.config(state = NORMAL)
+        listbox_b.insert(END, "x: " + str(x1) + ' ' + "y: "+ str(y1))
 
 def zoom_minus(event):
     xm = event.x
@@ -579,91 +587,130 @@ def info_auther():
     ''')
 
 def Task_func():
+    if (K == 0):
+        F = box.showerror("Ошибка", "Вы не ввели данные для задачи")
+        return
     combinations()
     if (R < 100000):
-        d = 2*(D[0]*(D[3]-D[5])+D[2]*(D[5]-D[1])+D[4]*(D[1]-D[3]))
-        ux = ((D[0]*D[0]+D[1]*D[1])*(D[3]-D[5])+(D[2]*D[2]+D[3]*D[3])*(D[5]-D[1])+(D[4]*D[4]+D[5]*D[5])*(D[1]-D[3]))/d
-        uy = ((D[0]*D[0]+D[1]*D[1])*(D[4]-D[2])+(D[2]*D[2]+D[3]*D[3])*(D[0]-D[4])+(D[4]*D[4]+D[5]*D[5])*(D[2]-D[0]))/d
-        cvs.create_oval(ux-R,uy-R,ux+R,uy+R)
-        text = "Радиус окружности " + str(R) + ". Центр окружности x: " + str(x_c) + " y: " + str(y_c)
-        print(text) 
-        F = box.showinfo("Решение",text)
+        try:
+            d = 2*(D[0]*(D[3]-D[5])+D[2]*(D[5]-D[1])+D[4]*(D[1]-D[3]))
+            ux = ((D[0]*D[0]+D[1]*D[1])*(D[3]-D[5])+(D[2]*D[2]+D[3]*D[3])*(D[5]-D[1])+(D[4]*D[4]+D[5]*D[5])*(D[1]-D[3]))/d
+            uy = ((D[0]*D[0]+D[1]*D[1])*(D[4]-D[2])+(D[2]*D[2]+D[3]*D[3])*(D[0]-D[4])+(D[4]*D[4]+D[5]*D[5])*(D[2]-D[0]))/d
+            cvs.create_oval(ux-R,uy-R,ux+R,uy+R)
+            text = "Радиус окружности " + str(R) + ". Центр окружности x: " + str(x_c) + " y: " + str(y_c)
+            print(text) 
+            F = box.showinfo("Решение",text)
+        except ZeroDivisionError:
+            F = box.showinfo("Решение", "Такой окружности нет :(")
+            return
 
     else:
         F = box.showinfo("Решение","Такой окружности нет:(")
 
+def exit():
+    window.destroy()
+
+
 window = Tk()
 window.geometry('1200x600')
-window.resizable(width=False, height=False) # Запрет разворота окна
+#window.resizable(width=False, height=False) # Запрет разворота окна
 window.title("Задача №1")
 
 mainmenu = Menu(window)
 window.config(menu=mainmenu)
 mainmenu.add_command(label='О программе',command = info_task)
 mainmenu.add_command(label='Об авторе',command = info_auther)
+mainmenu.add_command(label='Выход',command = exit)
 
+frame_cvs = Frame(window, relief = RAISED, borderwidth = 1)
+frame_cvs.pack(fill = BOTH, expand = True, side = LEFT)
+cvs = Canvas (frame_cvs, bg = "lightblue")
+cvs.pack(fill = BOTH, expand = True)
 
-cvs = Canvas (window, width = 1000, height = 600, bg = "lightblue")
-cvs.place(x = 0, y = 0)
+frame_points_a = Frame(window, relief = RAISED, borderwidth = 1)
+frame_points_a.pack(fill = BOTH, expand = False, side = RIGHT)
 
-name1 = Label(window, text = "Выберете способ ввода:", relief = "solid", bg = "#FFFFFF")
-name1.place(x = 1030, y = 10)
-but1 = Button(window, text = "Клавиатура", command = Keyboard)
-but1.place(x = 1020, y = 35)
-but2 = Button(window, text = "Мышь", command = Mouse)
-but2.place(x = 1125, y = 35)
+name1_p = Label(frame_points_a, text = "Первое множество", relief = "solid", bg = "#FF69B4")
+name1_p.grid(column = 0, row = 0, columnspan = 2, sticky = W + E)
+scroll_a = Scrollbar(frame_points_a)
+listbox_a = Listbox(frame_points_a, height = 15, yscrollcommand = scroll_a.set)
+listbox_a.grid(column = 0, row = 1)
+scroll_a = Scrollbar(frame_points_a)
+scroll_a.grid(column = 1, row = 1, rowspan = 1)
+scroll_a.config(command=listbox_a.yview)
 
-name2 = Label(window, text = "Первое множество", relief = "solid", bg = "#FF69B4")
-name2.place(x = 1040, y = 80)
-name3 = Label(window, text = "Введите координаты точки:")
-name3.place(x = 1020, y = 110)
-en1 = Entry(window)
-en1.place(x = 1030, y = 133)
-but3 = Button(window, state = DISABLED, text = "ОК", command = points_a)
-but3.place(x = 1160, y = 130)
+name4_p = Label(frame_points_a, text = "Второе множество", relief = "solid", bg = "#00FF00")
+name4_p.grid(column = 0, row = 2, columnspan = 2, sticky = W + E, pady = 10)
+scroll_b = Scrollbar(frame_points_a)
+listbox_b = Listbox(frame_points_a, height = 15, yscrollcommand = scroll_b.set)
+listbox_b.grid(column = 0, row = 3)
+scroll_b = Scrollbar(frame_points_a)
+scroll_b.grid(column = 1, row = 3, rowspan = 1)
+scroll_b.config(command=listbox_b.yview)
 
-name4 = Label(window, text = "Второе множество", relief = "solid", bg = "#00FF00")
-name4.place(x = 1040, y = 180)
-name5 = Label(window, text = "Введите координаты точки:")
-name5.place(x = 1020, y = 210)
-en2 = Entry(window)
-en2.place(x = 1030, y = 233)
-but4 = Button(window, state = DISABLED, text = "ОК", command = points_b)
-but4.place(x = 1160, y = 230)
+frame_but = Frame(window, relief = RAISED, borderwidth = 1)
+#frame_but.grid(column = 2, row = 0)
+frame_but.pack(side = RIGHT)
+name1 = Label(frame_but, text = "Выберете способ ввода:", relief = "solid", bg = "#FFFFFF")
+name1.grid(column = 0, row = 0, columnspan = 2, sticky = W + E)
+#name1.pack(side = TOP, padx = 5)
+but1 = Button(frame_but, text = "Клавиатура", command = Keyboard)
+but1.grid(column = 0, row = 1, sticky = W + E, pady = 10)
+but2 = Button(frame_but, text = "Мышь", command = Mouse)
+but2.grid(column = 1, row = 1, sticky = W + E)
 
-name6 = Label(window, text = "Данные для задачи", relief = "solid", bg = "#FFFF00")
-name6.place(x = 1040, y = 270)
-name7 = Label(window, text = "Введите значение k:")
-name7.place(x = 1020, y = 300)
-en3 = Entry(window)
-en3.place(x = 1030, y = 323)
-but5 = Button(window, state = DISABLED, text = "ОК", command = add_k)
-but5.place(x = 1160, y = 320)
+name2 = Label(frame_but, text = "Первое множество", relief = "solid", bg = "#FF69B4")
+name2.grid(column = 0, row = 3, columnspan = 2, sticky = W + E, pady = 10)
+name3 = Label(frame_but, text = "Введите координаты точки:")
+name3.grid(column = 0, row = 4, columnspan = 2)
+en1 = Entry(frame_but)
+en1.grid(column = 0, row = 5)
+but3 = Button(frame_but, state = DISABLED, text = "ОК", command = points_a)
+but3.grid(column = 1, row = 5)
 
-name8 = Label(window, text = "Введите значение m:")
-name8.place(x = 1020, y = 350)
-en4 = Entry(window)
-en4.place(x = 1030, y = 373)
-but6 = Button(window, state = DISABLED, text = "ОК", command = add_m)
-but6.place(x = 1160, y = 370)
+name4 = Label(frame_but, text = "Второе множество", relief = "solid", bg = "#00FF00")
+name4.grid(column = 0, row = 7, columnspan = 2, sticky = W + E, pady = 10)
+name5 = Label(frame_but, text = "Введите координаты точки:")
+name5.grid(column = 0, row = 8, columnspan = 2)
+en2 = Entry(frame_but)
+en2.grid(column = 0, row = 9)
+but4 = Button(frame_but, state = DISABLED, text = "ОК", command = points_b)
+but4.grid(column = 1, row = 9)
 
-name9 = Label(window, text = "Введите значение q:")
-name9.place(x = 1020, y = 400)
-en5 = Entry(window)
-en5.place(x = 1030, y = 423)
-but7 = Button(window, state = DISABLED, text = "ОК", command = add_q)
-but7.place(x = 1160, y = 420)
+name6 = Label(frame_but, text = "Данные для задачи", relief = "solid", bg = "#FFFF00")
+name6.grid(column = 0, row = 10, columnspan = 2, sticky = W + E, pady = 10)
+name7 = Label(frame_but, text = "Введите значение k:")
+name7.grid(column = 0, row = 11, columnspan = 2)
+en3 = Entry(frame_but)
+en3.grid(column = 0, row = 12)
+but5 = Button(frame_but, state = DISABLED, text = "ОК", command = add_k)
+but5.grid(column = 1, row = 12)
 
-but8 = Button(window, state = DISABLED, text = " Окончить ввод ", command = Task_func)
-but8.place(x = 1050, y = 450)
+name8 = Label(frame_but, text = "Введите значение m:")
+name8.grid(column = 0, row = 13, columnspan = 2)
+en4 = Entry(frame_but)
+en4.grid(column = 0, row = 14)
+but6 = Button(frame_but, state = DISABLED, text = "ОК", command = add_m)
+but6.grid(column = 1, row = 14)
 
-but9 = Button(window, state = DISABLED, text = " Отменить действие ", command = delite_move)
-but9.place(x = 1040, y = 485)
+name9 = Label(frame_but, text = "Введите значение q:")
+name9.grid(column = 0, row = 15, columnspan = 2)
+en5 = Entry(frame_but)
+en5.grid(column = 0, row = 16)
+but7 = Button(frame_but, state = DISABLED, text = "ОК", command = add_q)
+but7.grid(column = 1, row = 16)
 
-but10 = Button(window, state = DISABLED, text = " Масштабирование ", command = Zoom)
-but10.place(x = 1040, y = 520)
+but8 = Button(frame_but, state = DISABLED, text = " Окончить ввод ", command = Task_func)
+but8.grid(column = 0, row = 17, columnspan = 2, pady = 10, sticky = W + E)
 
-but11 = Button(window, state = DISABLED, text = " Режим редактирования ", command = Edit_points)
-but11.place(x = 1030, y = 555)
+but9 = Button(frame_but, state = DISABLED, text = " Отменить действие ", command = delite_move)
+but9.grid(column = 0, row = 18, columnspan = 2, pady = 10, sticky = W + E)
+
+but10 = Button(frame_but, state = DISABLED, text = " Масштабирование ", command = Zoom)
+but10.grid(column = 0, row = 19, columnspan = 2, pady = 10, sticky = W + E)
+
+but11 = Button(frame_but, state = DISABLED, text = " Режим редактирования ", command = Edit_points)
+but11.grid(column = 0, row = 20, columnspan = 2, pady = 10, sticky = W + E)
+
 
 window.mainloop()	
