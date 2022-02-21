@@ -65,7 +65,7 @@ Y_m_t = Y_m
 X_t = X_m
 Y_t = Y_m
 
-f = pi / 40
+f = pi/50
 
 def draw_line(x_1, y_1, x_2, y_2):
 	cvs.create_line(x_1, y_1, x_2, y_2, fill = "black")
@@ -85,6 +85,7 @@ def draw():
 		draw_oval(Ovals_m_x[i][0], Ovals_m_y[i][0], Ovals_m_x[i][1], Ovals_m_y[i][1])
 	for i in range(0, len(Lines_m_x)):
 		draw_line(Lines_m_x[i][0], Lines_m_y[i][0], Lines_m_x[i][1], Lines_m_y[i][1])
+
 
 
 def zoom_plus(event):
@@ -355,14 +356,14 @@ cvs.pack(fill = BOTH, expand = True)
 
 frame_but = Frame(window, relief = RAISED, borderwidth = 1)
 frame_but.pack(side = TOP)
-but1 = Button(frame_but, text = "Нарисовать рисунок", command = draw)
+but1 = Button(frame_but, text = "Нарисовать", command = draw)
 but1.grid(column = 0, row = 0, sticky = W + E, pady = 10, columnspan = 2)
 
 but3 = Button(frame_but, text = "Масштабирование", command = Zoom )
 but3.grid(column = 0, row = 4, pady = 10, columnspan = 2)
 
-but4 = Button(frame_but, text = "Перенос рисунка", command = Transfer)
-but4.grid(column = 0, row = 5, pady = 10, columnspan = 2)
+but4 = Button(frame_but, text = "Перенос", command = Transfer)
+but4.grid(column = 0, row = 5, pady = 10, columnspan = 2, sticky = W + E)
 
 but5 = Button(frame_but, state = DISABLED, text = " Отменить действие ")
 but5.grid(column = 0, row = 6, columnspan = 2, pady = 10, sticky = W + E)
@@ -371,8 +372,8 @@ but6 = Button(frame_but, text = "Центр поворота", command = Turn)
 but6.grid(column = 0, row = 2, pady = 10 , sticky = W + E, columnspan = 2)
 
 but7 = Button(frame_but,text = "->", command = turn_right)
-but7.grid(column = 0, row = 3, pady = 10)
+but7.grid(column = 1, row = 3, pady = 10)
 but8 = Button(frame_but, text = "<-", command = turn_left)
-but8.grid(column = 1, row = 3, pady = 10)
+but8.grid(column = 0, row = 3, pady = 10)
 
 window.mainloop()	
