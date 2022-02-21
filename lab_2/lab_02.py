@@ -3,7 +3,7 @@ import tkinter.messagebox as box
 import numpy as np
 from math import *
 
-Triangels_x = [[450, 420, 480], [450, 420, 410], [450, 480, 490],
+Triangels_m_x = [[450, 420, 480], [450, 420, 410], [450, 480, 490],
 				[410, 420, 400],[400, 420, 400], [490, 500, 480],
 				[500, 480, 500], [420, 480, 450], [420, 450, 400],
 				[420, 400, 425], [480, 500, 450], [480, 500, 475], 
@@ -11,27 +11,27 @@ Triangels_x = [[450, 420, 480], [450, 420, 410], [450, 480, 490],
 				[450, 450, 425],[425, 450, 410], [475, 450, 485]]
 
 
-Triangels_y = [[240, 180, 180], [240, 180, 220], [240, 180, 220],
+Triangels_m_y = [[240, 180, 180], [240, 180, 220], [240, 180, 220],
 				[220, 180, 200] ,[200, 180, 175], [220, 200, 180],
 				[200, 180, 175] , [180, 180, 155] , [180, 155, 175],
 				[180, 175, 165], [180, 175, 155], [180, 175, 165],
 				[175, 165, 145], [175, 145, 165], [400, 240, 290],
 				[240, 400, 290], [290, 240, 220], [290, 240, 222]]
 
-Filed_x = [[490, 500, 498], [402, 400, 410], [450, 445, 455], 
+Filed_m_x = [[490, 500, 498], [402, 400, 410], [450, 445, 455], 
 			[450, 445, 440], [450, 455, 460], [450, 422, 478],
 			[600, 576, 580], [532, 548, 540], [530, 520, 525],
 			[550, 570, 560], [380, 360, 370], [340, 345, 350],
 			[372, 380, 388]]
 
-Filed_y = [[145, 175, 135], [135, 175, 145], [240, 230, 230],
+Filed_m_y = [[145, 175, 135], [135, 175, 145], [240, 230, 230],
 			[240, 230, 235], [240, 230, 235], [380, 395, 395],
 			[398, 375, 388], [210, 210, 218], [230, 230, 235],
 			[232, 232, 242], [380,380,390], [390, 395, 390],
 			[415, 423, 415]]
 
 
-Lines_x = [[450, 490], [490, 500], [500, 500], [500, 480], [480, 500], [480, 490],
+Lines_m_x = [[450, 490], [490, 500], [500, 500], [500, 480], [480, 500], [480, 490],
 			[480, 450], [480, 420], [420, 450], [420, 410], [410, 450],
 			[410, 400], [400, 420], [400, 400], [400, 420], [420, 450],
 			[480, 450], [450, 500], [450, 400], [420, 425], [480, 475],
@@ -41,7 +41,7 @@ Lines_x = [[450, 490], [490, 500], [500, 500], [500, 480], [480, 500], [480, 490
 			[535, 535], [535, 478], [478, 515], [515, 535], [515, 580],
 			[580, 535], [580, 600], [600, 535]]
 
-Lines_y = [[240, 220], [220, 200], [200, 175], [175, 180], [180, 200], [180, 220],
+Lines_m_y = [[240, 220], [220, 200], [200, 175], [175, 180], [180, 200], [180, 220],
 			[180, 240], [180, 180] , [180, 240], [180, 220], [220, 240],
 			[220, 200], [200, 180], [200, 175], [175, 180], [180, 155],
 			[180, 155], [155, 175], [155, 175], [180, 165], [180, 165],
@@ -51,17 +51,8 @@ Lines_y = [[240, 220], [220, 200], [200, 175], [175, 180], [180, 200], [180, 220
 			[285, 365], [365, 395], [395, 398], [398, 365], [398, 398],
 			[398, 365], [398, 398], [398, 365]]
 
-Lines_m_x = [[]]
-Lines_m_y = [[]]
-
-Filed_m_x = [[]]
-Filed_m_y = [[]]
-
-Ovals_m_x = [[]]
-Ovals_m_y = [[]]
-
-Ovals_x = [[415, 435], [465, 485]]
-Ovals_y = [[195, 215], [195, 215]]
+Ovals_m_x = [[415, 435], [465, 485]]
+Ovals_m_y = [[195, 215], [195, 215]]
 X_m = 450
 Y_m = 240
 
@@ -70,6 +61,9 @@ K_m = 1.25
 
 X_m_t = X_m
 Y_m_t = Y_m
+
+X_t = X_m
+Y_t = Y_m
 
 f = pi / 40
 
@@ -85,12 +79,12 @@ def draw_oval(x_1, y_1, x_2, y_2):
 def draw():
 	#for i in range(0, len(Triangels_x)):
 		#draw_trian(Triangels_x[i][0], Triangels_y[i][0], Triangels_x[i][1], Triangels_y[i][1],Triangels_x[i][2],Triangels_y[i][2])
-	for i in range(0, len(Filed_x)):
-		draw_filed(Filed_x[i][0], Filed_y[i][0], Filed_x[i][1], Filed_y[i][1], Filed_x[i][2],Filed_y[i][2])
-	for i in range(0, len(Ovals_x)):
-		draw_oval(Ovals_x[i][0], Ovals_y[i][0], Ovals_x[i][1], Ovals_y[i][1])
-	for i in range(0, len(Lines_x)):
-		draw_line(Lines_x[i][0], Lines_y[i][0], Lines_x[i][1], Lines_y[i][1])
+	for i in range(0, len(Filed_m_x)):
+		draw_filed(Filed_m_x[i][0], Filed_m_y[i][0], Filed_m_x[i][1], Filed_m_y[i][1], Filed_m_x[i][2],Filed_m_y[i][2])
+	for i in range(0, len(Ovals_m_x)):
+		draw_oval(Ovals_m_x[i][0], Ovals_m_y[i][0], Ovals_m_x[i][1], Ovals_m_y[i][1])
+	for i in range(0, len(Lines_m_x)):
+		draw_line(Lines_m_x[i][0], Lines_m_y[i][0], Lines_m_x[i][1], Lines_m_y[i][1])
 
 
 def zoom_plus(event):
@@ -101,10 +95,11 @@ def zoom_plus(event):
 
     global Lines_m_x
     global Lines_m_y
-    if (len(Lines_m_x) == 1):
-        Lines_m_x = Lines_x.copy()
-        Lines_m_y = Lines_y.copy()
 
+    global X_t
+    global Y_t
+    X_t = (K_p * X_t + (1 - K_p) * xm)
+    Y_t = (K_p * Y_t + (1 - K_p) * ym)
     for i in range(0, len(Lines_m_x)):
         for j in range(0, 2):
             Lines_m_x[i][j] = (K_p * Lines_m_x[i][j] + (1 - K_p) * xm)
@@ -112,9 +107,6 @@ def zoom_plus(event):
 
     global Filed_m_x
     global Filed_m_y
-    if (len(Filed_m_x) == 1):
-        Filed_m_x = Filed_x.copy()
-        Filed_m_y = Filed_y.copy()
 
     for i in range(0, len(Filed_m_x)):
         for j in range(0, 3):
@@ -123,9 +115,6 @@ def zoom_plus(event):
 
     global Ovals_m_x
     global Ovals_m_y
-    if (len(Ovals_m_x) == 1):
-        Ovals_m_x = Ovals_x.copy()
-        Ovals_m_y = Ovals_y.copy()
 
     for i in range(0, len(Ovals_m_x)):
         for j in range(0, 2):
@@ -137,7 +126,7 @@ def zoom_plus(event):
         draw_filed(Filed_m_x[i][0], Filed_m_y[i][0], Filed_m_x[i][1], Filed_m_y[i][1], Filed_m_x[i][2],Filed_m_y[i][2])
     for i in range(0, len(Ovals_m_x)):
         draw_oval(Ovals_m_x[i][0], Ovals_m_y[i][0], Ovals_m_x[i][1], Ovals_m_y[i][1])
-    for i in range(0, len(Lines_x)):
+    for i in range(0, len(Lines_m_x)):
         draw_line(Lines_m_x[i][0], Lines_m_y[i][0], Lines_m_x[i][1], Lines_m_y[i][1])
 
 def zoom_minus(event):
@@ -148,10 +137,11 @@ def zoom_minus(event):
 
     global Lines_m_x
     global Lines_m_y
-    if (len(Lines_m_x) == 1):
-        Lines_m_x = Lines_x.copy()
-        Lines_m_y = Lines_y.copy()
 
+    global X_t
+    global Y_t
+    X_t = (K_m * X_t + (1 - K_m) * xm)
+    Y_t = (K_m * Y_t + (1 - K_m) * ym)
     for i in range(0, len(Lines_m_x)):
         for j in range(0, 2):
             Lines_m_x[i][j] = (K_m * Lines_m_x[i][j] + (1 - K_m) * xm)
@@ -159,9 +149,6 @@ def zoom_minus(event):
 
     global Filed_m_x
     global Filed_m_y
-    if (len(Filed_m_x) == 1):
-        Filed_m_x = Filed_x.copy()
-        Filed_m_y = Filed_y.copy()
 
     for i in range(0, len(Filed_m_x)):
         for j in range(0, 3):
@@ -170,9 +157,6 @@ def zoom_minus(event):
 
     global Ovals_m_x
     global Ovals_m_y
-    if (len(Ovals_m_x) == 1):
-        Ovals_m_x = Ovals_x.copy()
-        Ovals_m_y = Ovals_y.copy()
 
     for i in range(0, len(Ovals_m_x)):
         for j in range(0, 2):
@@ -184,7 +168,7 @@ def zoom_minus(event):
         draw_filed(Filed_m_x[i][0], Filed_m_y[i][0], Filed_m_x[i][1], Filed_m_y[i][1], Filed_m_x[i][2],Filed_m_y[i][2])
     for i in range(0, len(Ovals_m_x)):
         draw_oval(Ovals_m_x[i][0], Ovals_m_y[i][0], Ovals_m_x[i][1], Ovals_m_y[i][1])
-    for i in range(0, len(Lines_x)):
+    for i in range(0, len(Lines_m_x)):
         draw_line(Lines_m_x[i][0], Lines_m_y[i][0], Lines_m_x[i][1], Lines_m_y[i][1])
 
 def fake_func(event):
@@ -194,12 +178,63 @@ def Zoom():
     cvs.bind('<Double-Button-1>', zoom_minus)
     cvs.bind('<Double-Button-3>', zoom_plus)
     cvs.bind('<Button-1>', fake_func)
+    cvs.bind('<Button-3>', fake_func)
 
 def get_center(event):
 	global X_m_t
 	global Y_m_t
 	X_m_t = event.x
 	Y_m_t = event.y
+
+def transfer_to(event):
+    x = event.x
+    y = event.y
+    global X_t
+    global Y_t
+    dx = x - X_t
+    dy = y - Y_t
+    X_t = x
+    Y_t = y
+    print(dx, dy)
+    global Lines_m_x
+    global Lines_m_y
+
+
+    for i in range(0, len(Lines_m_x)):
+        for j in range(0, 2):
+            Lines_m_x[i][j] = Lines_m_x[i][j] + dx
+            Lines_m_y[i][j] = Lines_m_y[i][j] + dy
+
+    global Filed_m_x
+    global Filed_m_y
+
+
+    for i in range(0, len(Filed_m_x)):
+        for j in range(0, 3):
+            Filed_m_x[i][j] = Filed_m_x[i][j] + dx
+            Filed_m_y[i][j] = Filed_m_y[i][j] + dy
+
+    global Ovals_m_x
+    global Ovals_m_y
+
+
+    for i in range(0, len(Ovals_m_x)):
+        for j in range(0, 2):
+            Ovals_m_x[i][j] = Ovals_m_x[i][j] + dx
+            Ovals_m_y[i][j] = Ovals_m_y[i][j] + dy
+
+    cvs.delete("all")
+    for i in range(0, len(Filed_m_x)):
+        draw_filed(Filed_m_x[i][0], Filed_m_y[i][0], Filed_m_x[i][1], Filed_m_y[i][1], Filed_m_x[i][2],Filed_m_y[i][2])
+    for i in range(0, len(Ovals_m_x)):
+        draw_oval(Ovals_m_x[i][0], Ovals_m_y[i][0], Ovals_m_x[i][1], Ovals_m_y[i][1])
+    for i in range(0, len(Lines_m_x)):
+        draw_line(Lines_m_x[i][0], Lines_m_y[i][0], Lines_m_x[i][1], Lines_m_y[i][1])
+
+def Transfer():
+    cvs.bind('<Button-1>', transfer_to)
+    cvs.bind('<Double-Button-1>', fake_func)
+    cvs.bind('<Double-Button-3>', fake_func)
 
 def Turn():
     cvs.bind('<Button-1>', get_center)
@@ -209,10 +244,12 @@ def Turn():
 def turn_right():
     global Lines_m_x
     global Lines_m_y
-    if (len(Lines_m_x) == 1):
-        Lines_m_x = Lines_x.copy()
-        Lines_m_y = Lines_y.copy()
 
+
+    global X_t
+    global Y_t
+    X_t = X_m_t + (X_t - X_m_t) * cos(-f) + (Y_t - Y_m_t) * sin(-f)
+    Y_t = Y_m_t - (X_t - X_m_t) * sin(-f) + (Y_t - Y_m_t) * cos(-f)
     for i in range(0, len(Lines_m_x)):
         for j in range(0, 2):
             Lines_m_x[i][j] = X_m_t + (Lines_m_x[i][j] - X_m_t) * cos(-f) + (Lines_m_y[i][j] - Y_m_t) * sin(-f)
@@ -220,9 +257,6 @@ def turn_right():
 
     global Filed_m_x
     global Filed_m_y
-    if (len(Filed_m_x) == 1):
-        Filed_m_x = Filed_x.copy()
-        Filed_m_y = Filed_y.copy()
 
     for i in range(0, len(Filed_m_x)):
         for j in range(0, 3):
@@ -231,9 +265,6 @@ def turn_right():
 
     global Ovals_m_x
     global Ovals_m_y
-    if (len(Ovals_m_x) == 1):
-        Ovals_m_x = Ovals_x.copy()
-        Ovals_m_y = Ovals_y.copy()
 
     for i in range(0, len(Ovals_m_x)):
         for j in range(0, 2):
@@ -245,16 +276,17 @@ def turn_right():
         draw_filed(Filed_m_x[i][0], Filed_m_y[i][0], Filed_m_x[i][1], Filed_m_y[i][1], Filed_m_x[i][2],Filed_m_y[i][2])
     for i in range(0, len(Ovals_m_x)):
         draw_oval(Ovals_m_x[i][0], Ovals_m_y[i][0], Ovals_m_x[i][1], Ovals_m_y[i][1])
-    for i in range(0, len(Lines_x)):
+    for i in range(0, len(Lines_m_x)):
         draw_line(Lines_m_x[i][0], Lines_m_y[i][0], Lines_m_x[i][1], Lines_m_y[i][1])
 
 def turn_left():
     global Lines_m_x
     global Lines_m_y
-    if (len(Lines_m_x) == 1):
-        Lines_m_x = Lines_x.copy()
-        Lines_m_y = Lines_y.copy()
 
+    global X_t
+    global Y_t
+    X_t = X_m_t + (X_t - X_m_t) * cos(f) + (Y_t - Y_m_t) * sin(f)
+    Y_t = Y_m_t - (X_t - X_m_t) * sin(f) + (Y_t - Y_m_t) * cos(f)
     for i in range(0, len(Lines_m_x)):
         for j in range(0, 2):
             Lines_m_x[i][j] = X_m_t + (Lines_m_x[i][j] - X_m_t) * cos(f) + (Lines_m_y[i][j] - Y_m_t) * sin(f)
@@ -262,9 +294,6 @@ def turn_left():
 
     global Filed_m_x
     global Filed_m_y
-    if (len(Filed_m_x) == 1):
-        Filed_m_x = Filed_x.copy()
-        Filed_m_y = Filed_y.copy()
 
     for i in range(0, len(Filed_m_x)):
         for j in range(0, 3):
@@ -273,9 +302,6 @@ def turn_left():
 
     global Ovals_m_x
     global Ovals_m_y
-    if (len(Ovals_m_x) == 1):
-        Ovals_m_x = Ovals_x.copy()
-        Ovals_m_y = Ovals_y.copy()
 
     for i in range(0, len(Ovals_m_x)):
         for j in range(0, 2):
@@ -287,7 +313,7 @@ def turn_left():
         draw_filed(Filed_m_x[i][0], Filed_m_y[i][0], Filed_m_x[i][1], Filed_m_y[i][1], Filed_m_x[i][2],Filed_m_y[i][2])
     for i in range(0, len(Ovals_m_x)):
         draw_oval(Ovals_m_x[i][0], Ovals_m_y[i][0], Ovals_m_x[i][1], Ovals_m_y[i][1])
-    for i in range(0, len(Lines_x)):
+    for i in range(0, len(Lines_m_x)):
         draw_line(Lines_m_x[i][0], Lines_m_y[i][0], Lines_m_x[i][1], Lines_m_y[i][1])
 
 def info_task():
@@ -327,18 +353,6 @@ frame_cvs.pack(fill = BOTH, expand = True, side = LEFT)
 cvs = Canvas (frame_cvs, bg = "white")
 cvs.pack(fill = BOTH, expand = True)
 
-frame_points = Frame(window, relief = RAISED, borderwidth = 1)
-frame_points.pack(fill = BOTH, expand = False, side = RIGHT)
-
-name1 = Label(frame_points, text = "Координаты точек", relief = "solid", bg = "#00FF00")
-name1.grid(column = 0, row = 2, columnspan = 2, sticky = W + E, pady = 10)
-scroll = Scrollbar(frame_points)
-list_box = Listbox(frame_points, height = 30, yscrollcommand = scroll.set)
-list_box.grid(column = 0, row = 3)
-scroll = Scrollbar(frame_points)
-scroll.grid(column = 1, row = 3, rowspan = 1)
-scroll.config(command=list_box.yview)
-
 frame_but = Frame(window, relief = RAISED, borderwidth = 1)
 frame_but.pack(side = TOP)
 but1 = Button(frame_but, text = "Нарисовать рисунок", command = draw)
@@ -347,7 +361,7 @@ but1.grid(column = 0, row = 0, sticky = W + E, pady = 10, columnspan = 2)
 but3 = Button(frame_but, text = "Масштабирование", command = Zoom )
 but3.grid(column = 0, row = 4, pady = 10, columnspan = 2)
 
-but4 = Button(frame_but, text = "Перенос рисунка")
+but4 = Button(frame_but, text = "Перенос рисунка", command = Transfer)
 but4.grid(column = 0, row = 5, pady = 10, columnspan = 2)
 
 but5 = Button(frame_but, state = DISABLED, text = " Отменить действие ")
