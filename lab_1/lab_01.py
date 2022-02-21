@@ -25,6 +25,23 @@ K_m = 1.5
 
 A_moves = [] # Массив действий над множеством а
 B_moves = [] # Массив действий над множеством b
+
+A_x_dels = []
+A_y_dels = []
+A_dels = []
+
+B_dels = []
+B_x_dels = []
+B_y_dels = []
+
+A_x_edit = []
+A_y_edit = []
+A_edit = []
+
+B_x_edit = []
+B_y_edit = []
+B_edit = []
+
 Flag_arr = [] # Массив del_flag-ов
 
 nums = ['1', '2', '3', '4', '5', '6', '7','8','9','0']
@@ -67,8 +84,6 @@ def points_b():
     en2.delete(0, END)
     but9.config(state = NORMAL)
     but11.config(state = NORMAL)
-    global Text_x
-    Text_x.append("HUI")
 
 def points_a():
     x = ''
@@ -128,6 +143,48 @@ def delite_move():
         X_p_a.pop(-1)
         Y_p_a.pop(-1)
         listbox_a.delete(listbox_a.size() - 1)
+    elif(del_flag == "del a"):
+        listbox_a.insert(A_dels[-1], "x: " + str(A_x_dels[-1]) + ' ' + "y: " + str(A_y_dels[-1]))
+        l_m = cvs.create_oval(A_x_dels[-1]-5,A_y_dels[-1]-5,A_x_dels[-1]+5,A_y_dels[- 1]+5,fill = "#FF69B4")
+        A_moves.insert(A_dels[-1],l_m)
+        X_p_a.insert(A_dels[-1], A_x_dels[-1])
+        Y_p_a.insert(A_dels[-1],A_y_dels[-1])
+        A_x_dels.pop(-1)
+        A_y_dels.pop(-1)
+        A_dels.pop(-1)
+    elif(del_flag == "del b"):
+        listbox_b.insert(B_dels[-1], "x: " + str(B_x_dels[-1]) + ' ' + "y: " + str(B_y_dels[-1]))
+        l_m = cvs.create_oval(B_x_dels[-1]-5,B_y_dels[-1]-5,B_x_dels[-1]+5,B_y_dels[- 1]+5,fill = "#00FF00")
+        B_moves.insert(B_dels[-1],l_m)
+        X_p_b.insert(B_dels[-1], B_x_dels[-1])
+        Y_p_b.insert(B_dels[-1], B_y_dels[-1])
+        B_x_dels.pop(-1)
+        B_y_dels.pop(-1)
+        B_dels.pop(-1)
+    elif(del_flag == "edit a"):
+        cvs.delete(A_moves[A_edit[-1]])
+        listbox_a.delete(A_edit[-1])
+        listbox_a.insert(A_edit[-1], "x: " + str(A_x_edit[-1]) + ' ' + "y: " + str(A_y_edit[-1]))
+        l_m = cvs.create_oval(A_x_edit[-1]-5,A_y_edit[-1]-5,A_x_edit[-1]+5,A_y_edit[- 1]+5,fill = "#FF69B4")
+        A_moves[A_edit[-1]] = l_m
+        X_p_a[A_edit[-1]] =  A_x_edit[-1]
+        Y_p_a[A_edit[-1]] =  A_y_edit[-1]
+        A_x_edit.pop(-1)
+        A_y_edit.pop(-1)
+        A_edit.pop(-1)
+    elif(del_flag == "edit b"):
+        cvs.delete(B_moves[B_edit[-1]])
+        listbox_b.delete(B_edit[-1])
+        listbox_b.insert(B_edit[-1], "x: " + str(B_x_edit[-1]) + ' ' + "y: " + str(B_y_edit[-1]))
+        l_m = cvs.create_oval(B_x_edit[-1]-5,B_y_edit[-1]-5,B_x_edit[-1]+5,B_y_edit[- 1]+5,fill = "#00FF00")
+        B_moves[B_edit[-1]] = l_m
+        X_p_b[B_edit[-1]] =  B_x_edit[-1]
+        Y_p_b[B_edit[-1]] =  B_y_edit[-1]
+        B_x_edit.pop(-1)
+        B_y_edit.pop(-1)
+        B_edit.pop(-1)
+
+
 
 def add_k():
     x = ''
@@ -323,6 +380,8 @@ def edit(event):
 
     global find_i
     global en1_2
+    global window_2
+    global last_move
 
     find_i = -1
     for i in range(0, len(X_p_a)):
@@ -330,23 +389,27 @@ def edit(event):
             find_i = i
 
     if (find_i != -1):
-        cvs.create_oval(X_p_a[find_i]-5,Y_p_a[find_i]-5,X_p_a[find_i]+5,Y_p_a[find_i]+5,fill = "#FFFF00")
+        last_move = cvs.create_oval(X_p_a[find_i]-5,Y_p_a[find_i]-5,X_p_a[find_i]+5,Y_p_a[find_i]+5,fill = "#FFFF00")
         cvs.bind('<Button-1>', fake_func)
         window_2 = Tk()
         window_2.geometry('300x150')
         window_2.resizable(width=False, height=False)
         window_2.title("Редактирование точки")
+        x_y = "Координаты точки: x: " + str(X_p_a[find_i]) + " y: " + str(Y_p_a[find_i]) 
+
+        name1_3 = Label(window_2, text = x_y, relief = "solid", bg = "#FFFFFF")
+        name1_3.place(x = 60, y = 15)
 
         name1_2 = Label(window_2, text = "Редактирование координат", relief = "solid", bg = "#FFFFFF")
-        name1_2.place(x = 70, y = 15)
+        name1_2.place(x = 70, y = 35)
         name2_2 = Label(window_2, text = "x y:")
-        name2_2.place(x = 40, y = 50)
+        name2_2.place(x = 40, y = 70)
         en1_2 = Entry(window_2)
-        en1_2.place(x = 60, y = 50)
+        en1_2.place(x = 60, y = 70)
         but3_2 = Button(window_2, text = "ОК", command = new_point_a)
-        but3_2.place(x = 200, y = 48)
+        but3_2.place(x = 200, y = 68)
         but4_2 = Button(window_2, text = "Удалить точку", command = del_point_a)
-        but4_2.place(x = 100, y = 90)
+        but4_2.place(x = 100, y = 110)
         window_2.mainloop()
         return
 
@@ -355,38 +418,121 @@ def edit(event):
             find_i = i
 
     if (find_i != -1):
-        cvs.create_oval(X_p_b[find_i]-5,Y_p_b[find_i]-5,X_p_b[find_i]+5,Y_p_b[find_i]+5,fill = "#FFFF00")
+        last_move = cvs.create_oval(X_p_b[find_i]-5,Y_p_b[find_i]-5,X_p_b[find_i]+5,Y_p_b[find_i]+5,fill = "#FFFF00")
         cvs.bind('<Button-1>', fake_func)
         window_2 = Tk()
         window_2.geometry('300x150')
         window_2.resizable(width=False, height=False)
         window_2.title("Редактирование точки")
 
+        x_y = "Координаты точки: x: " + str(X_p_b[find_i]) + " y: " + str(Y_p_b[find_i])
+
+        name1_3 = Label(window_2, text = x_y, relief = "solid", bg = "#FFFFFF")
+        name1_3.place(x = 60, y = 15)
+
         name1_2 = Label(window_2, text = "Редактирование координат", relief = "solid", bg = "#FFFFFF")
-        name1_2.place(x = 70, y = 15)
+        name1_2.place(x = 70, y = 35)
         name2_2 = Label(window_2, text = "x y:")
-        name2_2.place(x = 40, y = 50)
+        name2_2.place(x = 40, y = 70)
         en1_2 = Entry(window_2)
-        en1_2.place(x = 60, y = 50)
+        en1_2.place(x = 60, y = 70)
         but3_2 = Button(window_2, text = "ОК", command = new_point_b)
-        but3_2.place(x = 200, y = 48)
+        but3_2.place(x = 200, y = 68)
         but4_2 = Button(window_2, text = "Удалить точку", command = del_point_b)
-        but4_2.place(x = 100, y = 90)
+        but4_2.place(x = 100, y = 110)
         window_2.mainloop()
 
+def edit_list():
+    L = listbox_a.curselection()
+    M = listbox_b.curselection()
+    if (len(L) == 0 and len(M) == 0):
+        return
+    global find_i
+    global en1_2
+    global window_2
+    global last_move
+    if (len(L) == 1):
+        print(L[0])
+        find_i = L[0]
+        last_move = cvs.create_oval(X_p_a[find_i]-5,Y_p_a[find_i]-5,X_p_a[find_i]+5,Y_p_a[find_i]+5,fill = "#FFFF00")
+        cvs.bind('<Button-1>', fake_func)
+        window_2 = Tk()
+        window_2.geometry('300x150')
+        window_2.resizable(width=False, height=False)
+        window_2.title("Редактирование точки")
+        x_y = "Координаты точки: x: " + str(X_p_a[find_i]) + " y: " + str(Y_p_a[find_i]) 
 
+        name1_3 = Label(window_2, text = x_y, relief = "solid", bg = "#FFFFFF")
+        name1_3.place(x = 60, y = 15)
+
+        name1_2 = Label(window_2, text = "Редактирование координат", relief = "solid", bg = "#FFFFFF")
+        name1_2.place(x = 70, y = 35)
+        name2_2 = Label(window_2, text = "x y:")
+        name2_2.place(x = 40, y = 70)
+        en1_2 = Entry(window_2)
+        en1_2.place(x = 60, y = 70)
+        but3_2 = Button(window_2, text = "ОК", command = new_point_a)
+        but3_2.place(x = 200, y = 68)
+        but4_2 = Button(window_2, text = "Удалить точку", command = del_point_a)
+        but4_2.place(x = 100, y = 110)
+        window_2.mainloop()
+        return
+    if (len(M) == 0):
+        return
+    if (len(M) == 1):
+        find_i = M[0]
+        last_move = cvs.create_oval(X_p_b[find_i]-5,Y_p_b[find_i]-5,X_p_b[find_i]+5,Y_p_b[find_i]+5,fill = "#FFFF00")
+        cvs.bind('<Button-1>', fake_func)
+        window_2 = Tk()
+        window_2.geometry('300x150')
+        window_2.resizable(width=False, height=False)
+        window_2.title("Редактирование точки")
+
+        x_y = "Координаты точки: x: " + str(X_p_b[find_i]) + " y: " + str(Y_p_b[find_i])
+
+        name1_3 = Label(window_2, text = x_y, relief = "solid", bg = "#FFFFFF")
+        name1_3.place(x = 60, y = 15)
+
+        name1_2 = Label(window_2, text = "Редактирование координат", relief = "solid", bg = "#FFFFFF")
+        name1_2.place(x = 70, y = 35)
+        name2_2 = Label(window_2, text = "x y:")
+        name2_2.place(x = 40, y = 70)
+        en1_2 = Entry(window_2)
+        en1_2.place(x = 60, y = 70)
+        but3_2 = Button(window_2, text = "ОК", command = new_point_b)
+        but3_2.place(x = 200, y = 68)
+        but4_2 = Button(window_2, text = "Удалить точку", command = del_point_b)
+        but4_2.place(x = 100, y = 110)
+        window_2.mainloop()
+        return
 
 def del_point_a():
-    F = box.showinfo("Внимание","Действие необратимо")
+    #F = box.showinfo("Внимание","Действие необратимо")
+    A_dels.append(find_i)
+    listbox_a.delete(find_i)
+    cvs.delete(A_moves[find_i])
+    cvs.delete(last_move)
+    A_moves.pop(find_i)
+    A_x_dels.append(X_p_a[find_i])
+    A_y_dels.append(Y_p_a[find_i])
+    Flag_arr.append("del a")
     X_p_a.pop(find_i)
     Y_p_a.pop(find_i)
-    cancel_zoom()
+    window_2.destroy()
 
 def del_point_b():
-    F = box.showinfo("Внимание","Действие необратимо")
+    #F = box.showinfo("Внимание","Действие необратимо")
+    B_dels.append(find_i)
+    listbox_b.delete(find_i)
+    cvs.delete(B_moves[find_i])
+    cvs.delete(last_move)
+    B_moves.pop(find_i)
+    B_x_dels.append(X_p_b[find_i])
+    B_y_dels.append(Y_p_b[find_i])
+    Flag_arr.append("del b")
     X_p_b.pop(find_i)
     Y_p_b.pop(find_i)
-    cancel_zoom()
+    window_2.destroy()
 
 def new_point_a():
     x = ''
@@ -414,10 +560,21 @@ def new_point_a():
         return 0
     x = int(x)
     y = int(y)
+    A_x_edit.append(X_p_a[find_i])
+    A_y_edit.append(Y_p_a[find_i])
+    A_edit.append(find_i)
+    Flag_arr.append("edit a")
     X_p_a[find_i] = x
     Y_p_a[find_i] = y
-    cancel_zoom()
+    listbox_a.delete(find_i)
+    text = "x: " + str(X_p_a[find_i]) + " y: " + str(Y_p_a[find_i])
+    listbox_a.insert(find_i, text)
+    cvs.delete(last_move)
+    cvs.delete(A_moves[find_i])
+    l_m = cvs.create_oval(X_p_a[find_i]-5,Y_p_a[find_i]-5,X_p_a[find_i]+5,Y_p_a[find_i]+5,fill = "#FF69B4")
+    A_moves[find_i] = l_m
     en1_2.delete(0, END)
+    window_2.destroy()
 
 def new_point_b():
     x = ''
@@ -445,10 +602,21 @@ def new_point_b():
         return 0
     x = int(x)
     y = int(y)
+    B_x_edit.append(X_p_b[find_i])
+    B_y_edit.append(Y_p_b[find_i])
+    B_edit.append(find_i)
+    Flag_arr.append("edit b")
     X_p_b[find_i] = x
     Y_p_b[find_i] = y
-    cancel_zoom()
+    listbox_b.delete(find_i)
+    text = "x: " + str(X_p_b[find_i]) + " y: " + str(Y_p_b[find_i])
+    listbox_b.insert(find_i, text)
+    cvs.delete(last_move)
+    cvs.delete(B_moves[find_i])
+    l_m = cvs.create_oval(X_p_b[find_i]-5,Y_p_b[find_i]-5,X_p_b[find_i]+5,Y_p_b[find_i]+5,fill = "#00FF00")
+    B_moves[find_i] = l_m
     en1_2.delete(0, END)
+    window_2.destroy()
 
 
 def check_points(x_1, y_1, x_2, y_2, x_3, y_3):
@@ -533,14 +701,16 @@ def Edit_points():
     but6.config(state = DISABLED)
     but7.config(state = DISABLED)
     but8.config(state = DISABLED)
-    but9.config(state = DISABLED)
+    but9.config(state = NORMAL)
     but10.config(state = DISABLED)
+    edit_list()
 
     cvs.bind('<Button-1>', edit)
 
 
+
 def Keyboard():
-    cancel_zoom()
+    #cancel_zoom()
     but3.config(state = NORMAL)
     but4.config(state = NORMAL)
     but5.config(state = NORMAL)
@@ -550,7 +720,7 @@ def Keyboard():
     but10.config(state = NORMAL)
 
 def Mouse():
-    cancel_zoom()
+    #cancel_zoom()
     but3.config(state = DISABLED)
     but4.config(state = DISABLED)
     but5.config(state = NORMAL)
