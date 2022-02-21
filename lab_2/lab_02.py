@@ -68,6 +68,11 @@ Y_m = 240
 K_p = 0.75 # Коэфициенты масштабирования
 K_m = 1.25
 
+X_m_t = X_m
+Y_m_t = Y_m
+
+f = pi / 40
+
 def draw_line(x_1, y_1, x_2, y_2):
 	cvs.create_line(x_1, y_1, x_2, y_2, fill = "black")
 def draw_trian(x_1, y_1, x_2, y_2,x_3, y_3):
@@ -190,13 +195,109 @@ def Zoom():
     cvs.bind('<Double-Button-3>', zoom_plus)
     cvs.bind('<Button-1>', fake_func)
 
+def get_center(event):
+	global X_m_t
+	global Y_m_t
+	X_m_t = event.x
+	Y_m_t = event.y
+
+def Turn():
+    cvs.bind('<Button-1>', get_center)
+    cvs.bind('<Double-Button-1>', fake_func)
+    cvs.bind('<Double-Button-3>', fake_func)
+
+def turn_right():
+    global Lines_m_x
+    global Lines_m_y
+    if (len(Lines_m_x) == 1):
+        Lines_m_x = Lines_x.copy()
+        Lines_m_y = Lines_y.copy()
+
+    for i in range(0, len(Lines_m_x)):
+        for j in range(0, 2):
+            Lines_m_x[i][j] = X_m_t + (Lines_m_x[i][j] - X_m_t) * cos(-f) + (Lines_m_y[i][j] - Y_m_t) * sin(-f)
+            Lines_m_y[i][j] = Y_m_t - (Lines_m_x[i][j] - X_m_t) * sin(-f) + (Lines_m_y[i][j] - Y_m_t) * cos(-f)
+
+    global Filed_m_x
+    global Filed_m_y
+    if (len(Filed_m_x) == 1):
+        Filed_m_x = Filed_x.copy()
+        Filed_m_y = Filed_y.copy()
+
+    for i in range(0, len(Filed_m_x)):
+        for j in range(0, 3):
+            Filed_m_x[i][j] = X_m_t + (Filed_m_x[i][j] - X_m_t) * cos(-f) + (Filed_m_y[i][j] - Y_m_t) * sin(-f)
+            Filed_m_y[i][j] = Y_m_t - (Filed_m_x[i][j] - X_m_t) * sin(-f) + (Filed_m_y[i][j] - Y_m_t) * cos(-f)
+
+    global Ovals_m_x
+    global Ovals_m_y
+    if (len(Ovals_m_x) == 1):
+        Ovals_m_x = Ovals_x.copy()
+        Ovals_m_y = Ovals_y.copy()
+
+    for i in range(0, len(Ovals_m_x)):
+        for j in range(0, 2):
+            Ovals_m_x[i][j] = X_m_t + (Ovals_m_x[i][j] - X_m_t) * cos(-f) + (Ovals_m_y[i][j] - Y_m_t) * sin(-f)
+            Ovals_m_y[i][j] = Y_m_t - (Ovals_m_x[i][j] - X_m_t) * sin(-f) + (Ovals_m_y[i][j] - Y_m_t) * cos(-f)
+
+    cvs.delete("all")
+    for i in range(0, len(Filed_m_x)):
+        draw_filed(Filed_m_x[i][0], Filed_m_y[i][0], Filed_m_x[i][1], Filed_m_y[i][1], Filed_m_x[i][2],Filed_m_y[i][2])
+    for i in range(0, len(Ovals_m_x)):
+        draw_oval(Ovals_m_x[i][0], Ovals_m_y[i][0], Ovals_m_x[i][1], Ovals_m_y[i][1])
+    for i in range(0, len(Lines_x)):
+        draw_line(Lines_m_x[i][0], Lines_m_y[i][0], Lines_m_x[i][1], Lines_m_y[i][1])
+
+def turn_left():
+    global Lines_m_x
+    global Lines_m_y
+    if (len(Lines_m_x) == 1):
+        Lines_m_x = Lines_x.copy()
+        Lines_m_y = Lines_y.copy()
+
+    for i in range(0, len(Lines_m_x)):
+        for j in range(0, 2):
+            Lines_m_x[i][j] = X_m_t + (Lines_m_x[i][j] - X_m_t) * cos(f) + (Lines_m_y[i][j] - Y_m_t) * sin(f)
+            Lines_m_y[i][j] = Y_m_t - (Lines_m_x[i][j] - X_m_t) * sin(f) + (Lines_m_y[i][j] - Y_m_t) * cos(f)
+
+    global Filed_m_x
+    global Filed_m_y
+    if (len(Filed_m_x) == 1):
+        Filed_m_x = Filed_x.copy()
+        Filed_m_y = Filed_y.copy()
+
+    for i in range(0, len(Filed_m_x)):
+        for j in range(0, 3):
+            Filed_m_x[i][j] = X_m_t + (Filed_m_x[i][j] - X_m_t) * cos(f) + (Filed_m_y[i][j] - Y_m_t) * sin(f)
+            Filed_m_y[i][j] = Y_m_t - (Filed_m_x[i][j] - X_m_t) * sin(f) + (Filed_m_y[i][j] - Y_m_t) * cos(f)
+
+    global Ovals_m_x
+    global Ovals_m_y
+    if (len(Ovals_m_x) == 1):
+        Ovals_m_x = Ovals_x.copy()
+        Ovals_m_y = Ovals_y.copy()
+
+    for i in range(0, len(Ovals_m_x)):
+        for j in range(0, 2):
+            Ovals_m_x[i][j] = X_m_t + (Ovals_m_x[i][j] - X_m_t) * cos(f) + (Ovals_m_y[i][j] - Y_m_t) * sin(f)
+            Ovals_m_y[i][j] = Y_m_t - (Ovals_m_x[i][j] - X_m_t) * sin(f) + (Ovals_m_y[i][j] - Y_m_t) * cos(f)
+
+    cvs.delete("all")
+    for i in range(0, len(Filed_m_x)):
+        draw_filed(Filed_m_x[i][0], Filed_m_y[i][0], Filed_m_x[i][1], Filed_m_y[i][1], Filed_m_x[i][2],Filed_m_y[i][2])
+    for i in range(0, len(Ovals_m_x)):
+        draw_oval(Ovals_m_x[i][0], Ovals_m_y[i][0], Ovals_m_x[i][1], Ovals_m_y[i][1])
+    for i in range(0, len(Lines_x)):
+        draw_line(Lines_m_x[i][0], Lines_m_y[i][0], Lines_m_x[i][1], Lines_m_y[i][1])
+
 def info_task():
     F = box.showinfo(title='О программе', message =
     '''
     Вариант №14
     Нарисовать рисунок, затем его переместить, промасштабировать и повернуть.
     Масштабирование: двойной щелчок левой кнопкой - отдаление, правой - приближение
-    Поворот
+    Поворот: сначала выберите центр поворота (по умолчанию (450,240)), затем стрелочкам вправо и влево поворачивайте изображение
+    Перенос: щелчок мышью для выбора точки переноса 
     ''')
 
 def info_auther():
@@ -241,18 +342,23 @@ scroll.config(command=list_box.yview)
 frame_but = Frame(window, relief = RAISED, borderwidth = 1)
 frame_but.pack(side = TOP)
 but1 = Button(frame_but, text = "Нарисовать рисунок", command = draw)
-but1.grid(column = 0, row = 0, sticky = W + E, pady = 10)
-
-but2 = Button(frame_but, text = "Режим поворота")
-but2.grid(column = 0, row = 1, pady = 10)
+but1.grid(column = 0, row = 0, sticky = W + E, pady = 10, columnspan = 2)
 
 but3 = Button(frame_but, text = "Масштабирование", command = Zoom )
-but3.grid(column = 0, row = 2, pady = 10)
+but3.grid(column = 0, row = 4, pady = 10, columnspan = 2)
 
 but4 = Button(frame_but, text = "Перенос рисунка")
-but4.grid(column = 0, row = 3, pady = 10)
+but4.grid(column = 0, row = 5, pady = 10, columnspan = 2)
 
 but5 = Button(frame_but, state = DISABLED, text = " Отменить действие ")
-but5.grid(column = 0, row = 18, columnspan = 2, pady = 10, sticky = W + E)
+but5.grid(column = 0, row = 6, columnspan = 2, pady = 10, sticky = W + E)
+
+but6 = Button(frame_but, text = "Центр поворота", command = Turn)
+but6.grid(column = 0, row = 2, pady = 10 , sticky = W + E, columnspan = 2)
+
+but7 = Button(frame_but,text = "->", command = turn_right)
+but7.grid(column = 0, row = 3, pady = 10)
+but8 = Button(frame_but, text = "<-", command = turn_left)
+but8.grid(column = 1, row = 3, pady = 10)
 
 window.mainloop()	
