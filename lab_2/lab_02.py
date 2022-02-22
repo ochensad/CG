@@ -67,6 +67,8 @@ Y_t = Y_m
 
 f = pi/50
 
+nums = ['1', '2', '3', '4', '5', '6', '7','8','9','0']
+
 def draw_line(x_1, y_1, x_2, y_2):
 	cvs.create_line(x_1, y_1, x_2, y_2, fill = "black")
 def draw_trian(x_1, y_1, x_2, y_2,x_3, y_3):
@@ -180,6 +182,117 @@ def Zoom():
     cvs.bind('<Double-Button-3>', zoom_plus)
     cvs.bind('<Button-1>', fake_func)
     cvs.bind('<Button-3>', fake_func)
+
+def change_K_p():
+    global K_p
+    global en2_2
+    x = ''
+    flag = 0
+    for sym in en2_2.get():
+        if sym == ".":
+            x+= sym
+        elif sym not in nums:
+            F = box.showerror("Ошибка","Недопустимые символы")
+            en2_2.delete(0, END)
+            return
+        else:
+            x += sym
+    if (x == ''):
+        F = box.showerror("Ошибка","Недостаточно данных")
+        return 0
+    x = float(x)
+
+    K_p = x;
+    en2_2.delete(0, END)
+
+def change_K_m():
+    global K_m
+    global en1_2
+    x = ''
+    flag = 0
+    for sym in en1_2.get():
+        if sym == ".":
+            x += sym
+        elif sym not in nums:
+            F = box.showerror("Ошибка","Недопустимые символы")
+            en1_2.delete(0, END)
+            return
+        else:
+            x+= sym
+    if (x == ''):
+        F = box.showerror("Ошибка","Недостаточно данных")
+        return 0
+    x = float(x)
+    K_m = x;
+    en1_2.delete(0, END)
+
+def change():
+    global en1_2
+    global en2_2
+    window_2 = Tk()
+    window_2.geometry('300x150')
+    window_2.resizable(width=False, height=False)
+    window_2.title("Изменение коэфициентов масштабирования")
+    K = "K_p: " + str(K_p) + " K_m: " + str(K_m) 
+    name1_2 = Label(window_2, text = K)
+    name1_2.place(x = 90, y = 20)
+    name2_2 = Label(window_2, text = "K_m:")
+    name2_2.place(x = 30, y = 70)
+    en1_2 = Entry(window_2)
+    en1_2.place(x = 60, y = 70)
+    but3_2 = Button(window_2, text = "ОК", command = change_K_m)
+    but3_2.place(x = 200, y = 68)
+
+    name3_2 = Label(window_2, text = "K_p:")
+    name3_2.place(x = 30, y = 100)
+    en2_2 = Entry(window_2)
+    en2_2.place(x = 60, y = 100)
+    but4_2 = Button(window_2, text = "ОК", command = change_K_p)
+    but4_2.place(x = 200, y = 98)
+    window_2.mainloop()
+
+
+def change_and_read_f():
+    global f
+    global en1_3
+    x = ''
+    flag = 0
+    for sym in en1_3.get():
+        if sym not in nums:
+            F = box.showerror("Ошибка","Недопустимые символы")
+            en1_3.delete(0, END)
+            return
+        x += sym
+    if (x == ''):
+        F = box.showerror("Ошибка","Недостаточно данных")
+        return 0
+    x = int(x)
+    f = radians(x);
+    global K
+    K = "f: " +str(f)
+    en1_3.delete(0, END)
+    window_3.destroy()
+
+def change_f():
+    global en1_3
+    global K
+    global window_3
+    window_3 = Tk()
+    window_3.geometry('300x150')
+    window_3.resizable(width=False, height=False)
+    window_3.title("Изменение угла поворота")
+    K = "f: " + str(f) 
+    name1_3 = Label(window_3, text = K)
+    name1_3.place(x = 90, y = 20)
+    name2_3 = Label(window_3, text = "f:")
+    name2_3.place(x = 30, y = 70)
+    en1_3 = Entry(window_3)
+    en1_3.place(x = 60, y = 70)
+    but3_3 = Button(window_3, text = "ОК", command = change_and_read_f)
+    but3_3.place(x = 200, y = 68)
+
+    window_3.mainloop()
+
 
 def get_center(event):
 	global X_m_t
@@ -360,20 +473,26 @@ but1 = Button(frame_but, text = "Нарисовать", command = draw)
 but1.grid(column = 0, row = 0, sticky = W + E, pady = 10, columnspan = 2)
 
 but3 = Button(frame_but, text = "Масштабирование", command = Zoom )
-but3.grid(column = 0, row = 4, pady = 10, columnspan = 2)
+but3.grid(column = 0, row = 5, pady = 10, columnspan = 2)
+
+but5 = Button(frame_but, text = "Изменить коэфициенты масшт", command = change )
+but5.grid(column = 0, row = 6, pady = 10, columnspan = 2)
+
+but9 = Button(frame_but, text = "Изменить угол поворота", command = change_f )
+but9.grid(column = 0, row = 3, pady = 10, columnspan = 2)
 
 but4 = Button(frame_but, text = "Перенос", command = Transfer)
-but4.grid(column = 0, row = 5, pady = 10, columnspan = 2, sticky = W + E)
+but4.grid(column = 0, row = 7, pady = 10, columnspan = 2, sticky = W + E)
 
-but5 = Button(frame_but, state = DISABLED, text = " Отменить действие ")
-but5.grid(column = 0, row = 6, columnspan = 2, pady = 10, sticky = W + E)
+#but5 = Button(frame_but, state = DISABLED, text = " Отменить действие ")
+#but5.grid(column = 0, row = 6, columnspan = 2, pady = 10, sticky = W + E)
 
 but6 = Button(frame_but, text = "Центр поворота", command = Turn)
 but6.grid(column = 0, row = 2, pady = 10 , sticky = W + E, columnspan = 2)
 
 but7 = Button(frame_but,text = "->", command = turn_right)
-but7.grid(column = 1, row = 3, pady = 10)
+but7.grid(column = 1, row = 4, pady = 10)
 but8 = Button(frame_but, text = "<-", command = turn_left)
-but8.grid(column = 0, row = 3, pady = 10)
+but8.grid(column = 0, row = 4, pady = 10)
 
 window.mainloop()	

@@ -75,6 +75,8 @@ def points_b():
     	return 0
     x = int(x)
     y = int(y)
+    if (x < 0 or x > 1500 or y < 0 or y > 1500):
+        F = box.showerror("Ошибка","Недопустимые значения")
     X_p_b.append(x)
     Y_p_b.append(y)
     listbox_b.insert(END, "x: " + str(x) + ' ' + "y: "+ str(y))
@@ -111,6 +113,8 @@ def points_a():
     	return 0
     x = int(x)
     y = int(y)
+    if (x < 0 or x > 1500 or y < 0 or y > 1500):
+        F = box.showerror("Ошибка","Недопустимые значения")
     X_p_a.append(x)
     Y_p_a.append(y)
     listbox_a.insert(END, "x: " + str(x) + ' ' + "y: " + str(y))
@@ -702,7 +706,7 @@ def Edit_points():
     but7.config(state = DISABLED)
     but8.config(state = DISABLED)
     but9.config(state = NORMAL)
-    but10.config(state = DISABLED)
+    #but10.config(state = DISABLED)
     edit_list()
 
     cvs.bind('<Button-1>', edit)
@@ -717,7 +721,7 @@ def Keyboard():
     but6.config(state = NORMAL)
     but7.config(state = NORMAL)
     but8.config(state = NORMAL)
-    but10.config(state = NORMAL)
+    #but10.config(state = NORMAL)
 
 def Mouse():
     #cancel_zoom()
@@ -727,7 +731,7 @@ def Mouse():
     but6.config(state = NORMAL)
     but7.config(state = NORMAL)
     but8.config(state = NORMAL)
-    but10.config(state = NORMAL)
+    #but10.config(state = NORMAL)
 
     cvs.bind('<Button-1>', paint_a)
     cvs.bind('<Button-3>', paint_b)
@@ -876,8 +880,8 @@ but8.grid(column = 0, row = 17, columnspan = 2, pady = 10, sticky = W + E)
 but9 = Button(frame_but, state = DISABLED, text = " Отменить действие ", command = delite_move)
 but9.grid(column = 0, row = 18, columnspan = 2, pady = 10, sticky = W + E)
 
-but10 = Button(frame_but, state = DISABLED, text = " Масштабирование ", command = Zoom)
-but10.grid(column = 0, row = 19, columnspan = 2, pady = 10, sticky = W + E)
+#but10 = Button(frame_but, state = DISABLED, text = " Масштабирование ", command = Zoom)
+#but10.grid(column = 0, row = 19, columnspan = 2, pady = 10, sticky = W + E)
 
 but11 = Button(frame_but, state = DISABLED, text = " Режим редактирования ", command = Edit_points)
 but11.grid(column = 0, row = 20, columnspan = 2, pady = 10, sticky = W + E)
