@@ -65,6 +65,9 @@ Y_m_t = Y_m
 X_t = X_m
 Y_t = Y_m
 
+X_m_m = X_m
+Y_m_m = Y_m
+
 f = pi/50
 
 nums = ['1', '2', '3', '4', '5', '6', '7','8','9','0']
@@ -91,8 +94,8 @@ def draw():
 
 
 def zoom_plus(event):
-    xm = event.x
-    ym = event.y
+    xm = X_m_m
+    ym = Y_m_m
 
     global K_p
 
@@ -132,9 +135,61 @@ def zoom_plus(event):
     for i in range(0, len(Lines_m_x)):
         draw_line(Lines_m_x[i][0], Lines_m_y[i][0], Lines_m_x[i][1], Lines_m_y[i][1])
 
+def change_and_read_m():
+    x = ''
+    y = ''
+    flag = 0
+    for sym in en1_4.get():
+        if sym == ' ':
+            flag = 1
+        if flag == 0:
+            if sym not in nums:
+                F = box.showerror("Ошибка","Недопустимые символы")
+                en1_4.delete(0, END)
+                return
+            else:
+                x += sym
+        else:
+            if sym not in nums and sym != ' ':
+                F = box.showerror("Ошибка","Недопустимые символы")
+                en1_4.delete(0, END)
+                return
+            else:
+                y += sym
+    if (x == '' or y == ''):
+    	F = box.showerror("Ошибка","Недостаточно данных")
+    	return 0
+    x = int(x)
+    y = int(y)
+    global X_m_m
+    global Y_m_m
+    X_m_m = x
+    Y_m_m = y
+    window_4.destroy()
+
+def zoom_win():
+    global en1_4
+    global window_4
+    window_4 = Tk()
+    window_4.geometry('300x150')
+    window_4.resizable(width=False, height=False)
+    window_4.title("Изменение центра масш")
+    K = "Xc: " + str(X_m_m) + " Yc: " + str(Y_m_m)
+    name1_4 = Label(window_4, text = K)
+    name1_4.place(x = 90, y = 20)
+    name2_4 = Label(window_4, text = "xc yc:")
+    name2_4.place(x = 30, y = 70)
+    en1_4 = Entry(window_4)
+    en1_4.place(x = 60, y = 70)
+    but3_4 = Button(window_4, text = "ОК", command = change_and_read_m)
+    but3_4.place(x = 200, y = 68)
+
+    window_4.mainloop()
+
+
 def zoom_minus(event):
-    xm = event.x
-    ym = event.y
+    xm = X_m_m
+    ym = Y_m_m
 
     global K_p
 
@@ -478,11 +533,14 @@ but3.grid(column = 0, row = 5, pady = 10, columnspan = 2)
 but5 = Button(frame_but, text = "Изменить коэфициенты масшт", command = change )
 but5.grid(column = 0, row = 6, pady = 10, columnspan = 2)
 
+but9 = Button(frame_but, text = "Изменить центр масшт", command = zoom_win )
+but9.grid(column = 0, row = 7, pady = 10, columnspan = 2)
+
 but9 = Button(frame_but, text = "Изменить угол поворота", command = change_f )
 but9.grid(column = 0, row = 3, pady = 10, columnspan = 2)
 
 but4 = Button(frame_but, text = "Перенос", command = Transfer)
-but4.grid(column = 0, row = 7, pady = 10, columnspan = 2, sticky = W + E)
+but4.grid(column = 0, row = 8, pady = 10, columnspan = 2, sticky = W + E)
 
 #but5 = Button(frame_but, state = DISABLED, text = " Отменить действие ")
 #but5.grid(column = 0, row = 6, columnspan = 2, pady = 10, sticky = W + E)
