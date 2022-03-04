@@ -53,11 +53,15 @@ Lines_m_y = [[240, 220], [220, 200], [200, 175], [175, 180], [180, 200], [180, 2
 
 Ovals_m_x = [[415, 435], [465, 485]]
 Ovals_m_y = [[195, 215], [195, 215]]
+
+Ox = [500, 500, 0, 800]
+Oy = [0, 1500, 300, 300]
+
 X_m = 450
 Y_m = 240
 
-K_p = 0.75 # Коэфициенты масштабирования
-K_m = 1.25
+K_x = 0.75 # Коэфициенты масштабирования
+K_y = 1.25
 
 X_m_t = X_m
 Y_m_t = Y_m
@@ -70,7 +74,14 @@ Y_m_m = Y_m
 
 f = pi/50
 
+dx = 0
+dy = 0
+
 nums = ['1', '2', '3', '4', '5', '6', '7','8','9','0']
+
+def draw_o():
+	draw_line(Ox[0], Ox[2], Ox[1], Ox[3])
+	draw_line(Oy[0], Oy[2], Oy[1], Oy[3])
 
 def draw_line(x_1, y_1, x_2, y_2):
 	cvs.create_line(x_1, y_1, x_2, y_2, fill = "black")
@@ -82,6 +93,7 @@ def draw_oval(x_1, y_1, x_2, y_2):
 	#cvs.create_oval(x_1,y_1, x_2, y_2, fill = "grey")
 	cvs.create_arc(x_1,y_1,x_2,y_2, start = 220, extent = 100, outline = "black", style = ARC)
 def draw():
+	draw_o()
 	#for i in range(0, len(Triangels_x)):
 		#draw_trian(Triangels_x[i][0], Triangels_y[i][0], Triangels_x[i][1], Triangels_y[i][1],Triangels_x[i][2],Triangels_y[i][2])
 	for i in range(0, len(Filed_m_x)):
@@ -128,6 +140,7 @@ def zoom_plus(event):
             Ovals_m_y[i][j] = (K_p * Ovals_m_y[i][j] + (1 - K_p) * ym)
 
     cvs.delete("all")
+    draw_o()
     for i in range(0, len(Filed_m_x)):
         draw_filed(Filed_m_x[i][0], Filed_m_y[i][0], Filed_m_x[i][1], Filed_m_y[i][1], Filed_m_x[i][2],Filed_m_y[i][2])
     for i in range(0, len(Ovals_m_x)):
@@ -139,20 +152,20 @@ def change_and_read_m():
     x = ''
     y = ''
     flag = 0
-    for sym in en1_4.get():
+    for sym in en5.get():
         if sym == ' ':
             flag = 1
         if flag == 0:
             if sym not in nums:
                 F = box.showerror("Ошибка","Недопустимые символы")
-                en1_4.delete(0, END)
+                en5.delete(0, END)
                 return
             else:
                 x += sym
         else:
             if sym not in nums and sym != ' ':
                 F = box.showerror("Ошибка","Недопустимые символы")
-                en1_4.delete(0, END)
+                en5.delete(0, END)
                 return
             else:
                 y += sym
@@ -165,7 +178,6 @@ def change_and_read_m():
     global Y_m_m
     X_m_m = x
     Y_m_m = y
-    window_4.destroy()
 
 def zoom_win():
     global en1_4
@@ -187,7 +199,7 @@ def zoom_win():
     window_4.mainloop()
 
 
-def zoom_minus(event):
+def zoom():
     xm = X_m_m
     ym = Y_m_m
 
@@ -198,30 +210,31 @@ def zoom_minus(event):
 
     global X_t
     global Y_t
-    X_t = (K_m * X_t + (1 - K_m) * xm)
-    Y_t = (K_m * Y_t + (1 - K_m) * ym)
+    X_t = (K_x * X_t + (1 - K_x) * xm)
+    Y_t = (K_y * Y_t + (1 - K_y) * ym)
     for i in range(0, len(Lines_m_x)):
         for j in range(0, 2):
-            Lines_m_x[i][j] = (K_m * Lines_m_x[i][j] + (1 - K_m) * xm)
-            Lines_m_y[i][j] = (K_m * Lines_m_y[i][j] + (1 - K_m) * ym)
+            Lines_m_x[i][j] = (K_x * Lines_m_x[i][j] + (1 - K_x) * xm)
+            Lines_m_y[i][j] = (K_y * Lines_m_y[i][j] + (1 - K_y) * ym)
 
     global Filed_m_x
     global Filed_m_y
 
     for i in range(0, len(Filed_m_x)):
         for j in range(0, 3):
-            Filed_m_x[i][j] = (K_m * Filed_m_x[i][j] + (1 - K_m) * xm)
-            Filed_m_y[i][j] = (K_m * Filed_m_y[i][j] + (1 - K_m) * ym)
+            Filed_m_x[i][j] = (K_x * Filed_m_x[i][j] + (1 - K_x) * xm)
+            Filed_m_y[i][j] = (K_y * Filed_m_y[i][j] + (1 - K_y) * ym)
 
     global Ovals_m_x
     global Ovals_m_y
 
     for i in range(0, len(Ovals_m_x)):
         for j in range(0, 2):
-            Ovals_m_x[i][j] = (K_m * Ovals_m_x[i][j] + (1 - K_m) * xm)
-            Ovals_m_y[i][j] = (K_m * Ovals_m_y[i][j] + (1 - K_m) * ym)
+            Ovals_m_x[i][j] = (K_x * Ovals_m_x[i][j] + (1 - K_x) * xm)
+            Ovals_m_y[i][j] = (K_y * Ovals_m_y[i][j] + (1 - K_y) * ym)
 
     cvs.delete("all")
+    draw_o()
     for i in range(0, len(Filed_m_x)):
         draw_filed(Filed_m_x[i][0], Filed_m_y[i][0], Filed_m_x[i][1], Filed_m_y[i][1], Filed_m_x[i][2],Filed_m_y[i][2])
     for i in range(0, len(Ovals_m_x)):
@@ -232,23 +245,16 @@ def zoom_minus(event):
 def fake_func(event):
 	return
 
-def Zoom():
-    cvs.bind('<Double-Button-1>', zoom_minus)
-    cvs.bind('<Double-Button-3>', zoom_plus)
-    cvs.bind('<Button-1>', fake_func)
-    cvs.bind('<Button-3>', fake_func)
-
-def change_K_p():
-    global K_p
-    global en2_2
+def change_K_x():
+    global K_x
     x = ''
     flag = 0
-    for sym in en2_2.get():
+    for sym in en3.get():
         if sym == ".":
             x+= sym
         elif sym not in nums:
             F = box.showerror("Ошибка","Недопустимые символы")
-            en2_2.delete(0, END)
+            en3.delete(0, END)
             return
         else:
             x += sym
@@ -257,20 +263,19 @@ def change_K_p():
         return 0
     x = float(x)
 
-    K_p = x;
-    en2_2.delete(0, END)
+    K_x = x;
+    en3.delete(0, END)
 
-def change_K_m():
-    global K_m
-    global en1_2
+def change_K_y():
+    global K_y
     x = ''
     flag = 0
-    for sym in en1_2.get():
+    for sym in en4.get():
         if sym == ".":
             x += sym
         elif sym not in nums:
             F = box.showerror("Ошибка","Недопустимые символы")
-            en1_2.delete(0, END)
+            en4.delete(0, END)
             return
         else:
             x+= sym
@@ -278,44 +283,17 @@ def change_K_m():
         F = box.showerror("Ошибка","Недостаточно данных")
         return 0
     x = float(x)
-    K_m = x;
-    en1_2.delete(0, END)
-
-def change():
-    global en1_2
-    global en2_2
-    window_2 = Tk()
-    window_2.geometry('300x150')
-    window_2.resizable(width=False, height=False)
-    window_2.title("Изменение коэфициентов масштабирования")
-    K = "K_p: " + str(K_p) + " K_m: " + str(K_m) 
-    name1_2 = Label(window_2, text = K)
-    name1_2.place(x = 90, y = 20)
-    name2_2 = Label(window_2, text = "K_m:")
-    name2_2.place(x = 30, y = 70)
-    en1_2 = Entry(window_2)
-    en1_2.place(x = 60, y = 70)
-    but3_2 = Button(window_2, text = "ОК", command = change_K_m)
-    but3_2.place(x = 200, y = 68)
-
-    name3_2 = Label(window_2, text = "K_p:")
-    name3_2.place(x = 30, y = 100)
-    en2_2 = Entry(window_2)
-    en2_2.place(x = 60, y = 100)
-    but4_2 = Button(window_2, text = "ОК", command = change_K_p)
-    but4_2.place(x = 200, y = 98)
-    window_2.mainloop()
-
+    K_y = x;
+    en4.delete(0, END)
 
 def change_and_read_f():
     global f
-    global en1_3
     x = ''
     flag = 0
-    for sym in en1_3.get():
+    for sym in en2.get():
         if sym not in nums:
             F = box.showerror("Ошибка","Недопустимые символы")
-            en1_3.delete(0, END)
+            en2.delete(0, END)
             return
         x += sym
     if (x == ''):
@@ -324,46 +302,76 @@ def change_and_read_f():
     x = int(x)
     f = radians(x);
     global K
-    K = "f: " +str(f)
-    en1_3.delete(0, END)
-    window_3.destroy()
-
-def change_f():
-    global en1_3
-    global K
-    global window_3
-    window_3 = Tk()
-    window_3.geometry('300x150')
-    window_3.resizable(width=False, height=False)
-    window_3.title("Изменение угла поворота")
-    K = "f: " + str(f) 
-    name1_3 = Label(window_3, text = K)
-    name1_3.place(x = 90, y = 20)
-    name2_3 = Label(window_3, text = "f:")
-    name2_3.place(x = 30, y = 70)
-    en1_3 = Entry(window_3)
-    en1_3.place(x = 60, y = 70)
-    but3_3 = Button(window_3, text = "ОК", command = change_and_read_f)
-    but3_3.place(x = 200, y = 68)
-
-    window_3.mainloop()
+    en2.delete(0, END)
 
 
-def get_center(event):
-	global X_m_t
-	global Y_m_t
-	X_m_t = event.x
-	Y_m_t = event.y
+def change_and_read_xc_yc():
+    x = ''
+    y = ''
+    flag = 0
+    for sym in en1.get():
+        if sym == ' ':
+            flag = 1
+        if flag == 0:
+            if sym not in nums:
+                F = box.showerror("Ошибка","Недопустимые символы")
+                en1.delete(0, END)
+                return
+            else:
+                x += sym
+        else:
+            if sym not in nums and sym != ' ':
+                F = box.showerror("Ошибка","Недопустимые символы")
+                en1.delete(0, END)
+                return
+            else:
+                y += sym
+    if (x == '' or y == ''):
+    	F = box.showerror("Ошибка","Недостаточно данных")
+    	return 0
+    x = int(x)
+    y = int(y)
+    global X_m_t
+    global Y_m_t
+    X_m_t = x
+    Y_m_t = y
 
-def transfer_to(event):
-    x = event.x
-    y = event.y
-    global X_t
-    global Y_t
-    dx = x - X_t
-    dy = y - Y_t
-    X_t = x
-    Y_t = y
+def change_and_read_dx():
+    global dx
+    x = ''
+    flag = 0
+    for sym in en6.get():
+        if sym not in nums and sym !='-':
+            F = box.showerror("Ошибка","Недопустимые символы")
+            en6.delete(0, END)
+            return
+        x += sym
+    if (x == ''):
+        F = box.showerror("Ошибка","Недостаточно данных")
+        return 0
+    x = int(x)
+    dx = x;
+    en6.delete(0, END)
+
+def change_and_read_dy():
+    global dy
+    x = ''
+    flag = 0
+    for sym in en7.get():
+        if sym not in nums and sym !='-':
+            F = box.showerror("Ошибка","Недопустимые символы")
+            en7.delete(0, END)
+            return
+        x += sym
+    if (x == ''):
+        F = box.showerror("Ошибка","Недостаточно данных")
+        return 0
+    x = int(x)
+    dy = x;
+    en7.delete(0, END)
+
+
+def transfer_to():
     print(dx, dy)
     global Lines_m_x
     global Lines_m_y
@@ -393,22 +401,13 @@ def transfer_to(event):
             Ovals_m_y[i][j] = Ovals_m_y[i][j] + dy
 
     cvs.delete("all")
+    draw_o()
     for i in range(0, len(Filed_m_x)):
         draw_filed(Filed_m_x[i][0], Filed_m_y[i][0], Filed_m_x[i][1], Filed_m_y[i][1], Filed_m_x[i][2],Filed_m_y[i][2])
     for i in range(0, len(Ovals_m_x)):
         draw_oval(Ovals_m_x[i][0], Ovals_m_y[i][0], Ovals_m_x[i][1], Ovals_m_y[i][1])
     for i in range(0, len(Lines_m_x)):
         draw_line(Lines_m_x[i][0], Lines_m_y[i][0], Lines_m_x[i][1], Lines_m_y[i][1])
-
-def Transfer():
-    cvs.bind('<Button-1>', transfer_to)
-    cvs.bind('<Double-Button-1>', fake_func)
-    cvs.bind('<Double-Button-3>', fake_func)
-
-def Turn():
-    cvs.bind('<Button-1>', get_center)
-    cvs.bind('<Double-Button-1>', fake_func)
-    cvs.bind('<Double-Button-3>', fake_func)
 
 def turn_right():
     global Lines_m_x
@@ -441,6 +440,7 @@ def turn_right():
             Ovals_m_y[i][j] = Y_m_t - (Ovals_m_x[i][j] - X_m_t) * sin(-f) + (Ovals_m_y[i][j] - Y_m_t) * cos(-f)
 
     cvs.delete("all")
+    draw_o()
     for i in range(0, len(Filed_m_x)):
         draw_filed(Filed_m_x[i][0], Filed_m_y[i][0], Filed_m_x[i][1], Filed_m_y[i][1], Filed_m_x[i][2],Filed_m_y[i][2])
     for i in range(0, len(Ovals_m_x)):
@@ -478,6 +478,7 @@ def turn_left():
             Ovals_m_y[i][j] = Y_m_t - (Ovals_m_x[i][j] - X_m_t) * sin(f) + (Ovals_m_y[i][j] - Y_m_t) * cos(f)
 
     cvs.delete("all")
+    draw_o()
     for i in range(0, len(Filed_m_x)):
         draw_filed(Filed_m_x[i][0], Filed_m_y[i][0], Filed_m_x[i][1], Filed_m_y[i][1], Filed_m_x[i][2],Filed_m_y[i][2])
     for i in range(0, len(Ovals_m_x)):
@@ -509,7 +510,7 @@ def exit():
 window = Tk()
 window.geometry('1200x600')
 #window.resizable(width=False, height=False) # Запрет разворота окна
-window.title("Задача №1")
+window.title("Задача №2")
 
 mainmenu = Menu(window)
 window.config(menu=mainmenu)
@@ -520,37 +521,78 @@ mainmenu.add_command(label='Выход',command = exit)
 frame_cvs = Frame(window, relief = RAISED, borderwidth = 1)
 frame_cvs.pack(fill = BOTH, expand = True, side = LEFT)
 cvs = Canvas (frame_cvs, bg = "white")
+
 cvs.pack(fill = BOTH, expand = True)
 
 frame_but = Frame(window, relief = RAISED, borderwidth = 1)
 frame_but.pack(side = TOP)
 but1 = Button(frame_but, text = "Нарисовать", command = draw)
-but1.grid(column = 0, row = 0, sticky = W + E, pady = 10, columnspan = 2)
+but1.grid(column = 0, row = 0, sticky = W + E, pady = 10, columnspan = 3)
 
-but3 = Button(frame_but, text = "Масштабирование", command = Zoom )
-but3.grid(column = 0, row = 5, pady = 10, columnspan = 2)
+name1 = Label(frame_but, text = "Поворот")
+name1. grid(column = 0 , row  = 1, columnspan = 3)
 
-but5 = Button(frame_but, text = "Изменить коэфициенты масшт", command = change )
-but5.grid(column = 0, row = 6, pady = 10, columnspan = 2)
+name2 = Label(frame_but, text = "Xc Yc: ")
+name2. grid(column = 0, row = 2)
+en1 = Entry(frame_but)
+en1.grid(column = 1, row = 2)
+but2 = Button(frame_but, text = "ОК", command = change_and_read_xc_yc)
+but2.grid(column = 2, row = 2)
 
-but9 = Button(frame_but, text = "Изменить центр масшт", command = zoom_win )
-but9.grid(column = 0, row = 7, pady = 10, columnspan = 2)
+name3 = Label(frame_but, text = "f: ")
+name3. grid(column = 0, row = 3)
+en2 = Entry(frame_but)
+en2.grid(column = 1, row = 3)
+but3 = Button(frame_but, text = "ОК", command = change_and_read_f)
+but3.grid(column = 2, row = 3)
 
-but9 = Button(frame_but, text = "Изменить угол поворота", command = change_f )
-but9.grid(column = 0, row = 3, pady = 10, columnspan = 2)
 
-but4 = Button(frame_but, text = "Перенос", command = Transfer)
-but4.grid(column = 0, row = 8, pady = 10, columnspan = 2, sticky = W + E)
+but4 = Button(frame_but,text = "->", command = turn_right)
+but4.grid(column = 1, row = 4, pady = 10, columnspan = 2)
+but5 = Button(frame_but, text = "<-", command = turn_left)
+but5.grid(column = 0, row = 4, pady = 10, columnspan = 2)
 
-#but5 = Button(frame_but, state = DISABLED, text = " Отменить действие ")
-#but5.grid(column = 0, row = 6, columnspan = 2, pady = 10, sticky = W + E)
 
-but6 = Button(frame_but, text = "Центр поворота", command = Turn)
-but6.grid(column = 0, row = 2, pady = 10 , sticky = W + E, columnspan = 2)
+but6 = Button(frame_but, text = "Масштабирование", command = zoom )
+but6.grid(column = 0, row = 5, pady = 10, columnspan = 3)
 
-but7 = Button(frame_but,text = "->", command = turn_right)
-but7.grid(column = 1, row = 4, pady = 10)
-but8 = Button(frame_but, text = "<-", command = turn_left)
-but8.grid(column = 0, row = 4, pady = 10)
+name4 = Label(frame_but, text = "Kx:")
+name4.grid(column = 0, row = 6)
+en3 = Entry(frame_but)
+en3.grid(column = 1, row = 6)
+but6 = Button(frame_but, text = "ОК", command = change_K_x)
+but6.grid(column = 2, row = 6)
+
+name5 = Label(frame_but, text = "Ky:")
+name5.grid(column = 0, row = 7)
+en4 = Entry(frame_but)
+en4.grid(column = 1, row = 7)
+but7 = Button(frame_but, text = "ОК", command = change_K_y)
+but7.grid(column = 2, row = 7)
+
+name6 = Label(frame_but, text = "Xc Yc: ")
+name6. grid(column = 0, row = 8)
+en5 = Entry(frame_but)
+en5.grid(column = 1, row = 8)
+but8 = Button(frame_but, text = "ОК", command = change_and_read_m)
+but8.grid(column = 2, row = 8)
+
+but9 = Button(frame_but, text = "Перенос", command = transfer_to)
+but9.grid(column = 0, row = 10, pady = 10, columnspan = 3)
+
+name7 = Label(frame_but, text = "dx:")
+name7.grid(column = 0, row = 11)
+en6 = Entry(frame_but)
+en6.grid(column = 1, row = 11)
+but10 = Button(frame_but, text = "ОК", command = change_and_read_dx)
+but10.grid(column = 2, row = 11)
+
+name8 = Label(frame_but, text = "dy:")
+name8.grid(column = 0, row = 12)
+en7 = Entry(frame_but)
+en7.grid(column = 1, row = 12)
+but11 = Button(frame_but, text = "ОК", command = change_and_read_dy)
+but11.grid(column = 2, row = 12)
+
 
 window.mainloop()	
