@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QListWidget>
 
 #define WINDOW_WIDTH 970
 #define WINDOW_HEIGHT 630
@@ -20,8 +21,6 @@ public:
 
 private slots:
 
-    void on_Button_DDA_clicked();
-
     void on_go_back_Button_clicked();
 
     void on_addlineButton_clicked();
@@ -29,6 +28,8 @@ private slots:
     void on_comboBox_activated(int index);
 
     void on_horizontalSlider_sliderMoved(int position);
+
+    void on_listWidget_2_itemClicked(QListWidgetItem *item);
 
 private:
     Ui::MainWindow *ui;

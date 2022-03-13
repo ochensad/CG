@@ -19,21 +19,57 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     QListWidgetItem *item_blue = new QListWidgetItem(QIcon(":/new/prefix1/img/blue.png"), "blue");
+    QListWidgetItem *item_blue_1 = new QListWidgetItem(QIcon(":/new/prefix1/img/blue.png"), "blue");
     ui->listWidget->addItem(item_blue);
+    ui->listWidget_2->addItem(item_blue_1);
     QListWidgetItem *item_red = new QListWidgetItem(QIcon(":/new/prefix1/img/red.png"), "red");
+    QListWidgetItem *item_red_1 = new QListWidgetItem(QIcon(":/new/prefix1/img/red.png"), "red");
     ui->listWidget->addItem(item_red);
+    ui->listWidget_2->addItem(item_red_1);
     QListWidgetItem *item_pink = new QListWidgetItem(QIcon(":/new/prefix1/img/pink.png"), "pink");
+    QListWidgetItem *item_pink_1 = new QListWidgetItem(QIcon(":/new/prefix1/img/pink.png"), "pink");
     ui->listWidget->addItem(item_pink);
+    ui->listWidget_2->addItem(item_pink_1);
     QListWidgetItem *item_yellow = new QListWidgetItem(QIcon(":/new/prefix1/img/yellow.png"), "yellow");
+    QListWidgetItem *item_yellow_1 = new QListWidgetItem(QIcon(":/new/prefix1/img/yellow.png"), "yellow");
     ui->listWidget->addItem(item_yellow);
+    ui->listWidget_2->addItem(item_yellow_1);
     QListWidgetItem *item_green = new QListWidgetItem(QIcon(":/new/prefix1/img/green.png"), "green");
+    QListWidgetItem *item_green_1 = new QListWidgetItem(QIcon(":/new/prefix1/img/green.png"), "green");
     ui->listWidget->addItem(item_green);
+    ui->listWidget_2->addItem(item_green_1);
     QListWidgetItem *item_black = new QListWidgetItem(QIcon(":/new/prefix1/img/black.png"), "black");
+    QListWidgetItem *item_black_1 = new QListWidgetItem(QIcon(":/new/prefix1/img/black.png"), "black");
     ui->listWidget->addItem(item_black);
+    ui->listWidget_2->addItem(item_black_1);
     QListWidgetItem *item_purple = new QListWidgetItem(QIcon(":/new/prefix1/img/purple.png"), "purple");
+    QListWidgetItem *item_purple_1 = new QListWidgetItem(QIcon(":/new/prefix1/img/purple.png"), "purple");
     ui->listWidget->addItem(item_purple);
+    ui->listWidget_2->addItem(item_purple_1);
     QListWidgetItem *item_orange = new QListWidgetItem(QIcon(":/new/prefix1/img/orange.png"), "orange");
+    QListWidgetItem *item_orange_1 = new QListWidgetItem(QIcon(":/new/prefix1/img/orange.png"), "orange");
     ui->listWidget->addItem(item_orange);
+    ui->listWidget_2->addItem(item_orange_1);
+
+    QListWidgetItem *item_white = new QListWidgetItem(QIcon(":/new/prefix1/img/white.png"), "white");
+    ui->listWidget_2->addItem(item_white);
+    QListWidgetItem *item_magenta_1 = new QListWidgetItem(QIcon(":/new/prefix1/img/magenta.png"), "magenta");
+    ui->listWidget_2->addItem(item_magenta_1);
+    QListWidgetItem *item_cyan_1 = new QListWidgetItem(QIcon(":/new/prefix1/img/cyan.png"), "cyan");
+    ui->listWidget_2->addItem(item_cyan_1);
+    QListWidgetItem *item_gray_1 = new QListWidgetItem(QIcon(":/new/prefix1/img/gray.png"), "gray");
+    ui->listWidget_2->addItem(item_gray_1);
+    QListWidgetItem *item_light_green_1 = new QListWidgetItem(QIcon(":/new/prefix1/img/light_green.png"), "light green");
+    ui->listWidget_2->addItem(item_light_green_1);
+
+    QListWidgetItem *item_magenta = new QListWidgetItem(QIcon(":/new/prefix1/img/magenta.png"), "magenta");
+    ui->listWidget->addItem(item_magenta);
+    QListWidgetItem *item_cyan = new QListWidgetItem(QIcon(":/new/prefix1/img/cyan.png"), "cyan");
+    ui->listWidget->addItem(item_cyan);
+    QListWidgetItem *item_gray = new QListWidgetItem(QIcon(":/new/prefix1/img/gray.png"), "gray");
+    ui->listWidget->addItem(item_gray);
+    QListWidgetItem *item_light_green = new QListWidgetItem(QIcon(":/new/prefix1/img/light_green.png"), "light green");
+    ui->listWidget->addItem(item_light_green);
 
     QGraphicsScene *scene = new QGraphicsScene(this);
 
@@ -61,6 +97,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox->addItem("DDA");
     ui->comboBox->addItem("BresenhamReal");
     ui->comboBox->addItem("BresenhamInt");
+    ui->comboBox->addItem("Wu");
+    ui->comboBox->addItem("BresenhamWS");
 
     ui->Button_DDA->setStyleSheet("QPushButton {"
                                   "display: inline-block;"
@@ -138,6 +176,44 @@ MainWindow::MainWindow(QWidget *parent)
                               "box-shadow: 0 5px #666;"
                               "transform: translateY(4px);"
                             "}");
+    ui->listWidget_2->setStyleSheet("QListWidget {"
+                              "display: inline-block;"
+                              "font-size: 12px;"
+                              "cursor: pointer;"
+                              "text-align: center;"
+                              "text-decoration: none;"
+                              "outline: none;"
+                              "color: #696969;"
+                              "background-color: #fff;"
+                              "border: none;"
+                              "border-radius: 10px;"
+                              "box-shadow: 0 9px #999;"
+                            "}"
+                            "QListWidget:hover {background-color: #fff}"
+                            "QListWidget:pressed {"
+                              "selection-background-color: #C0C0C0;"
+                              "box-shadow: 0 5px #666;"
+                              "transform: translateY(4px);"
+                            "}");
+    ui->comboBox->setStyleSheet("QComboBox {"
+                              "display: inline-block;"
+                              "font-size: 12px;"
+                              "cursor: pointer;"
+                              "text-align: center;"
+                              "text-decoration: none;"
+                              "outline: none;"
+                              "color: #696969;"
+                              "background-color: #fff;"
+                              "border: none;"
+                              "border-radius: 10px;"
+                              "box-shadow: 0 9px #999;"
+                            "}"
+                            "QComboBox:hover {background-color: #fff}"
+                            "QComboBox:pressed {"
+                              "selection-background-color: #C0C0C0;"
+                              "box-shadow: 0 5px #666;"
+                              "transform: translateY(4px);"
+                            "}");
     ui->spinBox_x_end->setStyleSheet("QSpinBox {"
                               "display: inline-block;"
                               "font-size: 12px;"
@@ -198,36 +274,6 @@ MainWindow::~MainWindow()
     request_t request;
     request.action = QUIT;
     delete ui;
-}
-
-
-
-void MainWindow::on_Button_DDA_clicked()
-{
-    error_code_t er = OK;
-
-    request_t request;
-    request.action = DDA;
-    if (ui->listWidget->selectedItems().size() == 0)
-    {
-        er = ERROR_NO_COLOR;
-        error_message(er);
-        return;
-    }
-    request.color = ui->listWidget->currentItem()->text();
-    request.start.x = ui->spinBox_x_start->value();
-    request.start.y = ui->spinBox_y_start->value();
-    request.end.x = ui->spinBox_x_end->value();
-    request.end.y = ui->spinBox_y_end->value();
-
-    request.canvas = canvas;
-    request.k = k;
-    request.pix_size = pix;
-
-    actions_arr.push_back(request);
-    er = switch_action(request);
-    if (er)
-        error_message(er);
 }
 
 
@@ -315,6 +361,12 @@ void MainWindow::on_comboBox_activated(int index)
         act = B_REAL;
     else if (alg == "BresenhamInt")
         act = B_INT;
+    else if (alg == "Wu")
+        act = WU;
+    else if (alg == "BresenhamWS")
+        act = B_WS;
+    else
+        act = NO_ALG;
 }
 
 
@@ -351,5 +403,12 @@ void MainWindow::on_horizontalSlider_sliderMoved(int position)
 
     if (er)
         error_message(er);
+}
+
+void MainWindow::on_listWidget_2_itemClicked(QListWidgetItem *item)
+{
+    QString color = item->text();
+    QBrush brush(color, Qt::SolidPattern);
+    canvas.scene->setBackgroundBrush(brush);
 }
 

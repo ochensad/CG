@@ -8,5 +8,10 @@
         <file>img/purple.png</file>
         <file>img/red.png</file>
         <file>img/yellow.png</file>
+        <file>img/white.png</file>
+        <file>img/cyan.png</file>
+        <file>img/gray.png</file>
+        <file>img/light_green.png</file>
+        <file>img/magenta.png</file>
     </qresource>
 </RCC>

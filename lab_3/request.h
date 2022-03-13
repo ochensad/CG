@@ -14,6 +14,8 @@ enum action
     NO_ALG,
     B_REAL,
     B_INT,
+    WU,
+    B_WS,
     QUIT
 };
 
