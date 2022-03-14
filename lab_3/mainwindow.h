@@ -31,6 +31,24 @@ private slots:
 
     void on_listWidget_2_itemClicked(QListWidgetItem *item);
 
+    void on_action_5_triggered();
+
+    void on_action_6_triggered();
+
+    void on_action_7_triggered();
+
+    void on_Button_compare_clicked();
+
+    void on_actionDDA_triggered();
+
+    void on_actionBresenhamReal_triggered();
+
+    void on_actionBresenhamInt_triggered();
+
+    void on_actionBresenhamWS_triggered();
+
+    void on_actionWu_triggered();
+
 private:
     Ui::MainWindow *ui;
 };

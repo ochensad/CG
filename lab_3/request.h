@@ -31,5 +31,5 @@ struct request{
 
 using request_t = struct request;
 
-error_code_t switch_action(request_t &request);
+ret_data_t switch_action(request_t &request);
 #endif // REQUEST_H

@@ -1,7 +1,7 @@
 #include "algorithms.h"
 #include <math.h>
 
-static int RoundToInt(double d)
+int RoundToInt(double d)
 {
     return (int)round(d);
 }
@@ -23,7 +23,7 @@ point_t get_point(point_t point, const canvas_t &canvas)
     return point;
 }
 
-error_code_t line_algorithm(canvas_t canvas ,QString &color, point_t &start, point_t &end, float k, int pix_size)
+ret_data_t line_algorithm(canvas_t canvas ,QString &color, point_t &start, point_t &end, float k, int pix_size)
 {
     start = get_point(start, canvas);
     end = get_point(end, canvas);
@@ -31,19 +31,31 @@ error_code_t line_algorithm(canvas_t canvas ,QString &color, point_t &start, poi
     QPen pen(color);
     pen.setWidth(pix_size);
 
-    int x_m = 0;
-    int y_m = 0;
+    int x_m_s = 0;
+    int y_m_s = 0;
 
-    x_m = (int) (k * start.x + (1 - k) * (canvas.width / 2));
-    y_m = (int) (k * start.y + (1 - k) * (canvas.height / 2));
+    x_m_s = (int) (k * start.x + (1 - k) * (canvas.width / 2));
+    y_m_s = (int) (k * start.y + (1 - k) * (canvas.height / 2));
 
-    canvas.scene->addLine(x_m, y_m, end.x, end.y, pen);
-    return OK;
+    int x_m_e = 0;
+    int y_m_e = 0;
+
+    x_m_e = (int) (k * end.x + (1 - k) * (canvas.width / 2));
+    y_m_e = (int) (k * end.y + (1 - k) * (canvas.height / 2));
+
+    canvas.scene->addLine(x_m_s, y_m_s, x_m_e, y_m_e, pen);
+    ret_data_t r;
+    r.a = atan(abs(start.y - end.y)/abs(start.x - end.x));
+    r.steps = 0;
+    return r;
 }
 
-error_code_t DDA_algorithm(canvas_t canvas ,QString &color, point_t &start, point_t &end, float k, int pix_size)
+ret_data_t DDA_algorithm(canvas_t canvas ,QString &color, point_t &start, point_t &end, float k, int pix_size)
 {
-    static int steps_DDA = 0;
+
+    ret_data_t r;
+    r.steps = 0;
+    r.a = atan((float)(abs(start.y - end.y))/abs(start.x - end.x)) * 180.0 / PI;
 
     start = get_point(start, canvas);
     end = get_point(end, canvas);
@@ -57,11 +69,11 @@ error_code_t DDA_algorithm(canvas_t canvas ,QString &color, point_t &start, poin
     if (start.x == end.x && start.y == end.y && start.x >= 0 && start.x <= canvas.width
             && start.y >= 0 && start.y <= canvas.height)
     {
-        steps_DDA = 0;
+        r.steps = 1;
         x = (int) (k * x + (1 - k) * (canvas.width / 2));
-        y = (int) (k * y + (1 - k) * (canvas.height / 2));
+        y = (int) (k * (y-1) + (1 - k) * (canvas.height / 2));
         canvas.scene->addRect(x, y, pix_size, pix_size, pen ,brush);
-        return OK;
+        return r;
     }
 
     int l = abs(end.x - start.x) >= abs(end.y - start.y) ? abs(end.x - start.x): abs(end.y - start.y);
@@ -77,7 +89,7 @@ error_code_t DDA_algorithm(canvas_t canvas ,QString &color, point_t &start, poin
         int x_r = RoundToInt(x), y_r = RoundToInt(y);
 
         if (abs(x_r - x_prev) == 1 && abs(y_r - y_prev) == 1)
-            steps_DDA++;
+            r.steps++;
 
         x_prev = x_r;
         y_prev = y_r;
@@ -85,14 +97,14 @@ error_code_t DDA_algorithm(canvas_t canvas ,QString &color, point_t &start, poin
         if (x_r >= 0 && x_r <= canvas.width && y_r >= 0 && y_r <= canvas.height)
         {
             x_r = (int) (k * x_r + (1 - k) * (canvas.width / 2));
-            y_r = (int) (k * y_r + (1 - k) * (canvas.height / 2));
+            y_r = (int) (k * (y_r - 1) + (1 - k) * (canvas.height / 2));
             canvas.scene->addRect(x_r, y_r, pix_size, pix_size, pen ,brush);
         }
 
         x += dx;
         y += dy;
     }
-    return OK;
+    return r;
 }
 
 static void swap(int &a, int &b)
@@ -102,9 +114,11 @@ static void swap(int &a, int &b)
     b = tmp;
 }
 
-error_code_t BresenhamReal_algorithm(canvas_t canvas ,QString &color, point_t &start, point_t &end, float k, int pix_size)
+ret_data_t BresenhamReal_algorithm(canvas_t canvas ,QString &color, point_t &start, point_t &end, float k, int pix_size)
 {
-    static int steps_BReal = 0;
+    ret_data_t r;
+    r.steps = 0;
+    r.a = atan((float)(start.y - end.y)/start.x - end.x) * 180.0 / PI;
 
     start = get_point(start, canvas);
     end = get_point(end, canvas);
@@ -120,11 +134,11 @@ error_code_t BresenhamReal_algorithm(canvas_t canvas ,QString &color, point_t &s
     if (start.x == end.x && start.y == end.y && start.x >= 0 && start.x <= canvas.width
             && start.y >= 0 && start.y <= canvas.height)
     {
-        steps_BReal = 0;
+        r.steps++;
         x_m = (int) (k * start.x + (1 - k) * (canvas.width / 2));
-        y_m = (int) (k * start.y + (1 - k) * (canvas.height / 2));
+        y_m = (int) (k * (start.y-1) + (1 - k) * (canvas.height / 2));
         canvas.scene->addRect(x_m, y_m, pix_size, pix_size, pen ,brush);
-        return OK;
+        return r;
     }
     int swap_f = 0;
     int dx = end.x - start.x;
@@ -161,12 +175,12 @@ error_code_t BresenhamReal_algorithm(canvas_t canvas ,QString &color, point_t &s
         if (x >= 0 && x < canvas.width && y >= 0 && y < canvas.height)
         {
             x_m = (int) (k * x + (1 - k) * (canvas.width / 2));
-            y_m = (int) (k * y + (1 - k) * (canvas.height / 2));
+            y_m = (int) (k * (y-1) + (1 - k) * (canvas.height / 2));
             canvas.scene->addRect(x_m, y_m, pix_size, pix_size, pen, brush);
         }
 
         if (abs(x - prev_x) == 1 && abs(y - prev_y) == 1)
-            steps_BReal++;
+            r.steps++;
 
         prev_x = x;
         prev_y = y;
@@ -190,13 +204,15 @@ error_code_t BresenhamReal_algorithm(canvas_t canvas ,QString &color, point_t &s
 
         error += m;
     }
-    return OK;
+    return r;
 }
 
 
-error_code_t BresenhamInt_algorithm(canvas_t canvas ,QString &color, point_t &start, point_t &end, float k, int pix_size)
+ret_data_t BresenhamInt_algorithm(canvas_t canvas ,QString &color, point_t &start, point_t &end, float k, int pix_size)
 {
-    static int steps_BInt = 0;
+    ret_data_t r;
+    r.steps = 0;
+    r.a = atan((float)(start.y - end.y)/start.x - end.x) * 180.0 / PI;
 
     start = get_point(start, canvas);
     end = get_point(end, canvas);
@@ -212,11 +228,11 @@ error_code_t BresenhamInt_algorithm(canvas_t canvas ,QString &color, point_t &st
     if (start.x == end.x && start.y == end.y && start.x >= 0 && start.x <= canvas.width
             && start.y >= 0 && start.y <= canvas.height)
     {
-        steps_BInt = 0;
+        r.steps++;
         x_m = (int) (k * start.x + (1 - k) * (canvas.width / 2));
-        y_m = (int) (k * start.y + (1 - k) * (canvas.height / 2));
+        y_m = (int) (k * (start.y-1) + (1 - k) * (canvas.height / 2));
         canvas.scene->addRect(x_m, y_m, pix_size, pix_size, pen ,brush);
-        return OK;
+        return r;
     }
     int swap_f = 0;
     int dx = end.x - start.x;
@@ -253,12 +269,12 @@ error_code_t BresenhamInt_algorithm(canvas_t canvas ,QString &color, point_t &st
         if (x >= 0 && x < canvas.width && y >= 0 && y < canvas.height)
         {
             x_m = (int) (k * x + (1 - k) * (canvas.width / 2));
-            y_m = (int) (k * y + (1 - k) * (canvas.height / 2));
+            y_m = (int) (k * (y-1) + (1 - k) * (canvas.height / 2));
             canvas.scene->addRect(x_m, y_m, pix_size, pix_size, pen, brush);
         }
 
         if (abs(x - prev_x) == 1 && abs(y - prev_y) == 1)
-            steps_BInt++;
+            r.steps++;
 
         prev_x = x;
         prev_y = y;
@@ -282,13 +298,15 @@ error_code_t BresenhamInt_algorithm(canvas_t canvas ,QString &color, point_t &st
 
         error += 2 * dy;
     }
-    return OK;
+    return r;
 }
 
 
-error_code_t BresenhanWS(canvas_t canvas ,QString &color, point_t &start, point_t &end, float k, int pix_size, int level)
+ret_data_t BresenhanWS(canvas_t canvas ,QString &color, point_t &start, point_t &end, float k, int pix_size, int level)
 {
-    static int steps_BWS = 0;
+    ret_data_t r;
+    r.steps = 0;
+    r.a = atan((float)(start.y - end.y)/start.x - end.x) * 180.0 / PI;
 
     start = get_point(start, canvas);
     end = get_point(end, canvas);
@@ -308,11 +326,11 @@ error_code_t BresenhanWS(canvas_t canvas ,QString &color, point_t &start, point_
     if (start.x == end.x && start.y == end.y && start.x >= 0 && start.x <= canvas.width
             && start.y >= 0 && start.y <= canvas.height)
     {
-        steps_BWS = 0;
+        r.steps++;
         x_m = (int) (k * start.x + (1 - k) * (canvas.width / 2));
-        y_m = (int) (k * start.y + (1 - k) * (canvas.height / 2));
+        y_m = (int) (k * (start.y-1) + (1 - k) * (canvas.height / 2));
         canvas.scene->addRect(x_m, y_m, pix_size, pix_size, pen ,brush);
-        return OK;
+        return r;
     }
 
     int swap_f = 0;
@@ -363,7 +381,7 @@ error_code_t BresenhanWS(canvas_t canvas ,QString &color, point_t &start, point_
         pen.setColor(color_1);
         brush.setColor(color_1);
         x_m = (int) (k * x + (1 - k) * (canvas.width / 2));
-        y_m = (int) (k * y + (1 - k) * (canvas.height / 2));
+        y_m = (int) (k * (y-1) + (1 - k) * (canvas.height / 2));
         canvas.scene->addRect(x_m, y_m, pix_size, pix_size, pen, brush);
     }
 
@@ -384,7 +402,7 @@ error_code_t BresenhanWS(canvas_t canvas ,QString &color, point_t &start, point_
             y += sy;
             x += sx;
             error -= W;
-            steps_BWS ++;
+            r.steps++;
         }
 
         color_1.setAlpha(error * (255.0 / level));
@@ -393,17 +411,20 @@ error_code_t BresenhanWS(canvas_t canvas ,QString &color, point_t &start, point_
             pen.setColor(color_1);
             brush.setColor(color_1);
             x_m = (int) (k * x + (1 - k) * (canvas.width / 2));
-            y_m = (int) (k * y + (1 - k) * (canvas.height / 2));
+            y_m = (int) (k * (y-1) + (1 - k) * (canvas.height / 2));
             canvas.scene->addRect(x_m, y_m, pix_size, pix_size, pen, brush);
         }
 
     }
 
-    return OK;
+    return r;
 }
 
-error_code_t Wu(canvas_t canvas ,QString &color, point_t start, point_t end, float k, int pix_size)
+ret_data_t Wu(canvas_t canvas ,QString &color, point_t start, point_t end, float k, int pix_size)
 {
+    ret_data_t r;
+    r.steps = 0;
+    r.a = atan((float)(start.y - end.y)/start.x - end.x) * 180.0 / PI;
     start = get_point(start, canvas);
     end = get_point(end, canvas);
     bool swap_f = abs(end.y - start.y) > abs(end.x - start.y);
@@ -439,18 +460,18 @@ error_code_t Wu(canvas_t canvas ,QString &color, point_t start, point_t end, flo
     if (!swap_f)
     {
         x_m = (int) (k * start.x + (1 - k) * (canvas.width / 2));
-        y_m = (int) (k * start.y + (1 - k) * (canvas.height / 2));
+        y_m = (int) (k * (start.y-1) + (1 - k) * (canvas.height / 2));
         canvas.scene->addRect(x_m, y_m, pix_size, pix_size, pen ,brush);
         x_m = (int) (k * end.x + (1 - k) * (canvas.width / 2));
-        y_m = (int) (k * end.y + (1 - k) * (canvas.height / 2));
+        y_m = (int) (k * (end.y-1) + (1 - k) * (canvas.height / 2));
         canvas.scene->addRect(x_m, y_m, pix_size, pix_size, pen ,brush);
     }
     else
     {
-        x_m = (int) (k * start.x + (1 - k) * (canvas.width / 2));
+        x_m = (int) (k * (start.x-1) + (1 - k) * (canvas.width / 2));
         y_m = (int) (k * start.y + (1 - k) * (canvas.height / 2));
         canvas.scene->addRect(y_m, x_m, pix_size, pix_size, pen ,brush);
-        x_m = (int) (k * end.x + (1 - k) * (canvas.width / 2));
+        x_m = (int) (k * (end.x-1) + (1 - k) * (canvas.width / 2));
         y_m = (int) (k * end.y + (1 - k) * (canvas.height / 2));
         canvas.scene->addRect(y_m, x_m, pix_size, pix_size, pen ,brush);
     }
@@ -459,8 +480,6 @@ error_code_t Wu(canvas_t canvas ,QString &color, point_t start, point_t end, flo
 
     int prev_x = start.x, prev_y = start.y;
 
-    static int steps_Wu;
-    steps_Wu = 0;
 
     QColor color_1(color);
     color_i.toRgb();
@@ -471,7 +490,7 @@ error_code_t Wu(canvas_t canvas ,QString &color, point_t start, point_t end, flo
     for (int x = start.x + 1; x < end.x; x++)
     {
         if (abs(x - prev_x) == 1 && abs((int)y - prev_y) == 1)
-            steps_Wu++;
+            r.steps++;
 
         prev_x = x;
         prev_y = (int)y;
@@ -483,12 +502,12 @@ error_code_t Wu(canvas_t canvas ,QString &color, point_t start, point_t end, flo
             pen.setColor(color_1);
             brush.setColor(color_1);
             x_m = (int) (k * x + (1 - k) * (canvas.width / 2));
-            y_m = (int) (k * y + (1 - k) * (canvas.height / 2));
+            y_m = (int) (k * (y-1) + (1 - k) * (canvas.height / 2));
             canvas.scene->addRect(x_m, y_m, pix_size, pix_size, pen ,brush);
             pen.setColor(color_2);
             brush.setColor(color_2);
             x_m = (int) (k * x + (1 - k) * (canvas.width / 2));
-            y_m = (int) (k * (y + 1) + (1 - k) * (canvas.height / 2));
+            y_m = (int) (k * (y) + (1 - k) * (canvas.height / 2));
             canvas.scene->addRect(x_m, y_m, pix_size, pix_size, pen ,brush);
         }
         else
@@ -497,19 +516,19 @@ error_code_t Wu(canvas_t canvas ,QString &color, point_t start, point_t end, flo
             color_2.setAlpha((y - (float)trunc(y)) * 255);
             pen.setColor(color_1);
             brush.setColor(color_1);
-            x_m = (int) (k * x + (1 - k) * (canvas.width / 2));
+            x_m = (int) (k * (x-1) + (1 - k) * (canvas.width / 2));
             y_m = (int) (k * y + (1 - k) * (canvas.height / 2));
             canvas.scene->addRect(y_m, x_m, pix_size, pix_size, pen ,brush);
             pen.setColor(color_2);
             brush.setColor(color_2);
-            x_m = (int) (k * x + (1 - k) * (canvas.width / 2));
+            x_m = (int) (k * (x-1) + (1 - k) * (canvas.width / 2));
             y_m = (int) (k * (y + 1) + (1 - k) * (canvas.height / 2));
             canvas.scene->addRect(y_m, x_m, pix_size, pix_size, pen ,brush);
         }
 
         y += grad;
     }
-    return OK;
+    return r;
 }
 
 

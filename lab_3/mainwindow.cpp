@@ -5,6 +5,8 @@
 #include <vector>
 #include <QIcon>
 #include <stdio.h>
+#include <cmath>
+#include <QMessageBox>
 
 static canvas_t canvas;
 vector<request_t> actions_arr;
@@ -100,7 +102,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox->addItem("Wu");
     ui->comboBox->addItem("BresenhamWS");
 
-    ui->Button_DDA->setStyleSheet("QPushButton {"
+    ui->Button_compare->setStyleSheet("QPushButton {"
                                   "display: inline-block;"
                                   "font-size: 12px;"
                                   "cursor: pointer;"
@@ -305,10 +307,8 @@ void MainWindow::on_go_back_Button_clicked()
     {
         item.k = k;
         item.pix_size = pix;
-        er = switch_action(item);
+        switch_action(item);
     }
-    if (er)
-        error_message(er);
 }
 
 
@@ -317,6 +317,7 @@ void MainWindow::on_addlineButton_clicked()
     request_t request;
     request.action = act;
     error_code_t er = OK;
+    ret_data_t r;
 
     if (act == NO_ALG)
     {
@@ -343,15 +344,14 @@ void MainWindow::on_addlineButton_clicked()
     request.pix_size = pix;
 
     actions_arr.push_back(request);
-    er = switch_action(request);
-    if (er)
-        error_message(er);
+    r = switch_action(request);
 }
 
 
 void MainWindow::on_comboBox_activated(int index)
 {
     QString alg = ui->comboBox->currentText();
+    printf("%d", index);
 
     if (alg == "DDA")
         act = DDA;
@@ -378,6 +378,7 @@ void MainWindow::on_horizontalSlider_sliderMoved(int position)
     k = 1.0 + position/ 10;
     printf("%d %lf\n", position, k);
 
+    ret_data_t r;
     error_code_t er = OK;
 
     er = clear_canvas(canvas);
@@ -398,11 +399,8 @@ void MainWindow::on_horizontalSlider_sliderMoved(int position)
     {
         item.k = k;
         item.pix_size = pix;
-        er = switch_action(item);
+        r = switch_action(item);
     }
-
-    if (er)
-        error_message(er);
 }
 
 void MainWindow::on_listWidget_2_itemClicked(QListWidgetItem *item)
@@ -410,5 +408,264 @@ void MainWindow::on_listWidget_2_itemClicked(QListWidgetItem *item)
     QString color = item->text();
     QBrush brush(color, Qt::SolidPattern);
     canvas.scene->setBackgroundBrush(brush);
+}
+
+
+void MainWindow::on_action_5_triggered()
+{
+    QMessageBox::about (NULL, "Об авторе", "Ляпина Наталья \n ИУ7-42Б Вариант №14 \nМогу рассказать анекдот");
+}
+
+
+void MainWindow::on_action_6_triggered()
+{
+    QMessageBox::about (NULL, "О задаче", "Реализовать различные алгоритмы построения одиночных отрезков. "
+                                          "Отрезок задается координатой начала, координатой конца и цветом.");
+}
+
+
+void MainWindow::on_action_7_triggered()
+{
+    if(QMessageBox:: question (NULL, "Выход", "Вы действительно хотите выйти?") == QMessageBox::Yes)
+        QApplication::quit();
+}
+
+
+void MainWindow::on_Button_compare_clicked()
+{
+    int step = ui->spinBox->value();
+
+    for(int i = 0; i < 6; i++)
+    {
+        if (i == 0)
+            act = DDA;
+        else if (i == 1)
+            act = B_REAL;
+        else if (i == 2)
+            act = B_INT;
+        else if (i == 3)
+            act = B_WS;
+        else if (i == 4)
+            act = WU;
+        else if (i == 5)
+            act = ORDINARYLINE;
+        request_t request;
+        request.action = act;
+        ret_data_t er;
+
+        request.color = ui->listWidget->item(i)->text();
+        request.start.x = ui->spinBox_x_start->value() + i * step;
+        request.start.y = ui->spinBox_y_start->value();
+        request.end.x = ui->spinBox_x_end->value() + i * step;
+        request.end.y = ui->spinBox_y_end->value();
+
+        request.canvas = canvas;
+        request.k = k;
+        request.pix_size = pix;
+
+        actions_arr.push_back(request);
+        er = switch_action(request);
+
+    }
+}
+
+
+void MainWindow::on_actionDDA_triggered()
+{
+    FILE *f = fopen("output.txt", "w");
+
+    int len = 150;
+    point_t center;
+    center.x = 0;
+    center.y = 0;
+
+    for(int i = 0; i <= 360; i++)
+    {
+        point_t end;
+        end.x = RoundToInt(center.x + len * cos(i * PI / 180.0));
+        end.y = RoundToInt(center.y + len * sin(i * PI / 180.0));
+        request_t request;
+        request.action = DDA;
+        ret_data_t er;
+
+        request.color = ui->listWidget->item(0)->text();
+        request.start.x = center.x;
+        request.start.y = center.y;
+        request.end.x = end.x;
+        request.end.y = end.y;
+
+        request.canvas = canvas;
+        request.k = k;
+        request.pix_size = pix;
+
+        er = switch_action(request);
+        er.a = i;
+        fprintf(f, "%d %d\n", (int)er.a, er.steps);
+    }
+    fclose(f);
+    request_t request;
+    request.action = NO_ALG;
+    actions_arr.push_back(request);
+    system("python graph.py");
+}
+
+
+void MainWindow::on_actionBresenhamReal_triggered()
+{
+    FILE *f = fopen("output.txt", "w");
+
+    int len = 150;
+    point_t center;
+    center.x = 0;
+    center.y = 0;
+
+    for(int i = 0; i <= 360; i++)
+    {
+        point_t end;
+        end.x = RoundToInt(center.x + len * cos(i * PI / 180.0));
+        end.y = RoundToInt(center.y + len * sin(i * PI / 180.0));
+        request_t request;
+        request.action = B_REAL;
+        ret_data_t er;
+
+        request.color = ui->listWidget->item(0)->text();
+        request.start.x = center.x;
+        request.start.y = center.y;
+        request.end.x = end.x;
+        request.end.y = end.y;
+
+        request.canvas = canvas;
+        request.k = k;
+        request.pix_size = pix;
+
+        er = switch_action(request);
+        er.a = i;
+        fprintf(f, "%d %d\n", (int)er.a, er.steps);
+    }
+    fclose(f);
+    request_t request;
+    request.action = NO_ALG;
+    actions_arr.push_back(request);
+    system("python graph.py");
+}
+
+
+void MainWindow::on_actionBresenhamInt_triggered()
+{
+    FILE *f = fopen("output.txt", "w");
+
+    int len = 150;
+    point_t center;
+    center.x = 0;
+    center.y = 0;
+
+    for(int i = 0; i <= 360; i++)
+    {
+        point_t end;
+        end.x = RoundToInt(center.x + len * cos(i * PI / 180.0));
+        end.y = RoundToInt(center.y + len * sin(i * PI / 180.0));
+        request_t request;
+        request.action = B_INT;
+        ret_data_t er;
+
+        request.color = ui->listWidget->item(0)->text();
+        request.start.x = center.x;
+        request.start.y = center.y;
+        request.end.x = end.x;
+        request.end.y = end.y;
+
+        request.canvas = canvas;
+        request.k = k;
+        request.pix_size = pix;
+
+        er = switch_action(request);
+        er.a = i;
+        fprintf(f, "%d %d\n", (int)er.a, er.steps);
+    }
+    fclose(f);
+    request_t request;
+    request.action = NO_ALG;
+    actions_arr.push_back(request);
+    system("python graph.py");
+}
+
+
+void MainWindow::on_actionBresenhamWS_triggered()
+{
+    FILE *f = fopen("output.txt", "w");
+
+    int len = 150;
+    point_t center;
+    center.x = 0;
+    center.y = 0;
+
+    for(int i = 0; i <= 360; i++)
+    {
+        point_t end;
+        end.x = RoundToInt(center.x + len * cos(i * PI / 180.0));
+        end.y = RoundToInt(center.y + len * sin(i * PI / 180.0));
+        request_t request;
+        request.action = B_WS;
+        ret_data_t er;
+
+        request.color = ui->listWidget->item(0)->text();
+        request.start.x = center.x;
+        request.start.y = center.y;
+        request.end.x = end.x;
+        request.end.y = end.y;
+
+        request.canvas = canvas;
+        request.k = k;
+        request.pix_size = pix;
+
+        er = switch_action(request);
+        er.a = i;
+        fprintf(f, "%d %d\n", (int)er.a, er.steps);
+    }
+    fclose(f);
+    request_t request;
+    request.action = NO_ALG;
+    actions_arr.push_back(request);
+    system("python graph.py");
+}
+
+
+void MainWindow::on_actionWu_triggered()
+{
+    FILE *f = fopen("output.txt", "w");
+
+    int len = 150;
+    point_t center;
+    center.x = 0;
+    center.y = 0;
+
+    for(int i = 0; i <= 360; i++)
+    {
+        point_t end;
+        end.x = RoundToInt(center.x + len * cos(i * PI / 180.0));
+        end.y = RoundToInt(center.y + len * sin(i * PI / 180.0));
+        request_t request;
+        request.action = WU;
+        ret_data_t er;
+
+        request.color = ui->listWidget->item(0)->text();
+        request.start.x = center.x;
+        request.start.y = center.y;
+        request.end.x = end.x;
+        request.end.y = end.y;
+
+        request.canvas = canvas;
+        request.k = k;
+        request.pix_size = pix;
+
+        er = switch_action(request);
+        er.a = i;
+        fprintf(f, "%d %d\n", (int)er.a, er.steps);
+    }
+    fclose(f);
+    request_t request;
+    request.action = NO_ALG;
+    actions_arr.push_back(request);
+    system("python graph.py");
 }
 

@@ -1,9 +1,11 @@
 #include "request.h"
 #include <QMessageBox>
 
-error_code_t switch_action(request_t &request)
+ret_data_t switch_action(request_t &request)
 {
-    error_code_t er = OK;
+    ret_data_t er;
+    er.a = 0;
+    er.steps = 0;
 
     switch (request.action)
     {
