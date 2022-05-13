@@ -1,0 +1,640 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1550</width>
+    <height>920</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Заполнение областей</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGraphicsView" name="view">
+    <property name="geometry">
+     <rect>
+      <x>-10</x>
+      <y>0</y>
+      <width>1200</width>
+      <height>811</height>
+     </rect>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>16777215</width>
+      <height>811</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="table">
+    <property name="geometry">
+     <rect>
+      <x>1210</x>
+      <y>10</y>
+      <width>301</width>
+      <height>331</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QTableWidget {display: inline-block;
+                              font-size: 12px;
+                              cursor: pointer;
+                              text-align: center;
+                              text-decoration: none;
+                              outline: none;
+                              color: #696969;
+                              background-color: #fff;
+                              border: none;
+                              border-radius: 10px;
+                              box-shadow: 0 9px #999;
+                            }
+QTableWidget:hover {background-color: #fff}
+QTableWidget:pressed {
+selection-background-color: #C0C0C0;
+                              box-shadow: 0 5px #666;
+                              transform: translateY(4px);
+                            }</string>
+    </property>
+    <column>
+     <property name="text">
+      <string>X</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Y</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QLabel" name="label_color">
+    <property name="geometry">
+     <rect>
+      <x>1430</x>
+      <y>790</y>
+      <width>51</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>1210</x>
+      <y>350</y>
+      <width>301</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>9</pointsize>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>Для ввода мышкой</string>
+    </property>
+    <widget class="QCheckBox" name="horiz">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>271</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Calibri</family>
+       <pointsize>9</pointsize>
+       <italic>false</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>горизонтальная прямая</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="vertic">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>60</y>
+       <width>251</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Calibri</family>
+       <pointsize>9</pointsize>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>вертикальная прямая</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>1210</x>
+      <y>460</y>
+      <width>301</width>
+      <height>121</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>9</pointsize>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>Для ввода с клавиатуры</string>
+    </property>
+    <widget class="QSpinBox" name="x">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>30</y>
+       <width>81</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Calibri</family>
+       <pointsize>-1</pointsize>
+       <bold>false</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QSpinBox {
+                              display: inline-block;
+                              font-size: 16px;
+                              cursor: pointer;
+                              text-align: center;
+                              text-decoration: none;
+                              outline: none;
+                              color: #696969;
+                              background-color: #fff;
+                              border: none;
+                              border-radius: 10px;
+                              box-shadow: 0 9px #999;
+                            }
+                            QSpinBox:hover {background-color: #fff}
+                            QSpinBox:pressed {
+                              selection-background-color: #C0C0C0;
+                              box-shadow: 0 5px #666;
+                              transform: translateY(4px);
+                            }</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>561</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>16</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Calibri</family>
+       <pointsize>10</pointsize>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>X</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="y">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>30</y>
+       <width>81</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Calibri</family>
+       <pointsize>-1</pointsize>
+       <bold>false</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QSpinBox {
+                              display: inline-block;
+                              font-size: 16px;
+                              cursor: pointer;
+                              text-align: center;
+                              text-decoration: none;
+                              outline: none;
+                              color: #696969;
+                              background-color: #fff;
+                              border: none;
+                              border-radius: 10px;
+                              box-shadow: 0 9px #999;
+                            }
+                            QSpinBox:hover {background-color: #fff}
+                            QSpinBox:pressed {
+                              selection-background-color: #C0C0C0;
+                              box-shadow: 0 5px #666;
+                              transform: translateY(4px);
+                            }</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>581</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_2">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>30</y>
+       <width>16</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Calibri</family>
+       <pointsize>10</pointsize>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Y</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="addpoint">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>281</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Calibri</family>
+       <pointsize>-1</pointsize>
+       <bold>false</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {display: inline-block;
+                       font-size: 20px;
+                       cursor: pointer;
+                       text-align: center;
+                       text-decoration: none;
+                       outline: none;
+                        color: #fff;
+                        background-color: #4CAF50;
+                        border: none;
+                        border-radius: 10px;
+                        box-shadow: 0 9px #999;
+                         }
+QPushButton:hover {background-color: #3e8e41}
+QPushButton:pressed {background-color: #3e8e41;
+                        box-shadow: 0 5px #666;
+                        ransform: translateY(4px);
+                        }</string>
+     </property>
+     <property name="text">
+      <string>Добавить точку</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>1210</x>
+      <y>590</y>
+      <width>301</width>
+      <height>91</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>9</pointsize>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>Взаимодействие с холстом</string>
+    </property>
+    <widget class="QPushButton" name="lock">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>131</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Calibri</family>
+       <pointsize>-1</pointsize>
+       <bold>false</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {display: inline-block;
+                       font-size: 20px;
+                       cursor: pointer;
+                       text-align: center;
+                       text-decoration: none;
+                       outline: none;
+                        color: #fff;
+                        background-color: #4CAF50;
+                        border: none;
+                        border-radius: 10px;
+                        box-shadow: 0 9px #999;
+                         }
+QPushButton:hover {background-color: #3e8e41}
+QPushButton:pressed {background-color: #3e8e41;
+                        box-shadow: 0 5px #666;
+                        ransform: translateY(4px);
+                        }</string>
+     </property>
+     <property name="text">
+      <string>Замкнуть</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="erase">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>30</y>
+       <width>131</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Calibri</family>
+       <pointsize>-1</pointsize>
+       <bold>false</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {display: inline-block;
+                       font-size: 20px;
+                       cursor: pointer;
+                       text-align: center;
+                       text-decoration: none;
+                       outline: none;
+                        color: #fff;
+                        background-color: #4CAF50;
+                        border: none;
+                        border-radius: 10px;
+                        box-shadow: 0 9px #999;
+                         }
+QPushButton:hover {background-color: #3e8e41}
+QPushButton:pressed {background-color: #3e8e41;
+                        box-shadow: 0 5px #666;
+                        ransform: translateY(4px);
+                        }</string>
+     </property>
+     <property name="text">
+      <string>Очистить</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_4">
+    <property name="geometry">
+     <rect>
+      <x>1210</x>
+      <y>690</y>
+      <width>301</width>
+      <height>211</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>Segoe UI</family>
+      <pointsize>9</pointsize>
+      <bold>false</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>Закраска</string>
+    </property>
+    <widget class="QSpinBox" name="ms_del">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>30</y>
+       <width>131</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QSpinBox {
+                              display: inline-block;
+                              font-size: 16px;
+                              cursor: pointer;
+                              text-align: center;
+                              text-decoration: none;
+                              outline: none;
+                              color: #696969;
+                              background-color: #fff;
+                              border: none;
+                              border-radius: 10px;
+                              box-shadow: 0 9px #999;
+                            }
+                            QSpinBox:hover {background-color: #fff}
+                            QSpinBox:pressed {
+                              selection-background-color: #C0C0C0;
+                              box-shadow: 0 5px #666;
+                              transform: translateY(4px);
+                            }</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>10000</number>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="timer">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>161</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Calibri</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Засечь время</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="delay">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>110</y>
+       <width>161</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Calibri</family>
+       <pointsize>9</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>С задержкой</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="change_color">
+     <property name="geometry">
+      <rect>
+       <x>160</x>
+       <y>80</y>
+       <width>131</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Calibri</family>
+       <pointsize>-1</pointsize>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {display: inline-block;
+                       font-size: 20px;
+                       cursor: pointer;
+                       text-align: center;
+                       text-decoration: none;
+                       outline: none;
+                        color: #fff;
+                        background-color: #4CAF50;
+                        border: none;
+                        border-radius: 10px;
+                        box-shadow: 0 9px #999;
+                         }
+QPushButton:hover {background-color: #3e8e41}
+QPushButton:pressed {background-color: #3e8e41;
+                        box-shadow: 0 5px #666;
+                        ransform: translateY(4px);
+                        }</string>
+     </property>
+     <property name="text">
+      <string>Цвет закраски</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="paint">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>160</y>
+       <width>281</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Calibri</family>
+       <pointsize>-1</pointsize>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {display: inline-block;
+                       font-size: 20px;
+                       cursor: pointer;
+                       text-align: center;
+                       text-decoration: none;
+                       outline: none;
+                        color: #fff;
+                        background-color: #4CAF50;
+                        border: none;
+                        border-radius: 10px;
+                        box-shadow: 0 9px #999;
+                         }
+QPushButton:hover {background-color: #3e8e41}
+QPushButton:pressed {background-color: #3e8e41;
+                        box-shadow: 0 5px #666;
+                        ransform: translateY(4px);
+                        }</string>
+     </property>
+     <property name="text">
+      <string>Закрасить</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_3">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>111</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>Calibri</family>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>Задержка</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

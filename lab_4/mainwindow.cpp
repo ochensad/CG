@@ -12,6 +12,7 @@ static canvas_t canvas;
 vector<request_t> actions_arr;
 point_t Ox;
 enum action act = NO_ALG;
+enum type type = NO_TYPE;
 static float k = 1.0;
 static int pix = 1;
 
@@ -95,12 +96,11 @@ MainWindow::MainWindow(QWidget *parent)
     canvas.scene->addLine(Ox.x, Ox.y, 0, Ox.y, QPen(Qt::black, 1));
     canvas.scene->addLine(Ox.x, Ox.y, 970, Ox.y, QPen(Qt::black, 1));
 
-    ui->comboBox->addItem("Qtline");
-    ui->comboBox->addItem("DDA");
-    ui->comboBox->addItem("BresenhamReal");
-    ui->comboBox->addItem("BresenhamInt");
-    ui->comboBox->addItem("Wu");
-    ui->comboBox->addItem("BresenhamWS");
+    ui->comboBox->addItem("Canon");
+    ui->comboBox->addItem("Param");
+    ui->comboBox->addItem("Bresenham");
+    ui->comboBox->addItem("MidPoint");
+    ui->comboBox->addItem("Ordinary");
 
     ui->Button_compare->setStyleSheet("QPushButton {"
                                   "display: inline-block;"
@@ -121,7 +121,7 @@ MainWindow::MainWindow(QWidget *parent)
                                   "box-shadow: 0 5px #666;"
                                   "transform: translateY(4px);"
                                 "}");
-    ui->addlineButton->setStyleSheet("QPushButton {"
+    ui->pushButton_Add->setStyleSheet("QPushButton {"
                                   "display: inline-block;"
                                   "font-size: 12px;"
                                   "cursor: pointer;"
@@ -140,6 +140,7 @@ MainWindow::MainWindow(QWidget *parent)
                                   "box-shadow: 0 5px #666;"
                                   "transform: translateY(4px);"
                                 "}");
+
     ui->go_back_Button->setStyleSheet("QPushButton {"
                               "display: inline-block;"
                               "font-size: 12px;"
@@ -216,32 +217,6 @@ MainWindow::MainWindow(QWidget *parent)
                               "box-shadow: 0 5px #666;"
                               "transform: translateY(4px);"
                             "}");
-    ui->spinBox_x_end->setStyleSheet("QSpinBox {"
-                              "display: inline-block;"
-                              "font-size: 12px;"
-                              "cursor: pointer;"
-                              "text-align: center;"
-                              "text-decoration: none;"
-                              "outline: none;"
-                              "color: #696969;"
-                              "background-color: #DCDCDC;"
-                              "border: none;"
-                              "border-radius: 10px;"
-                              "box-shadow: 0 9px #999;"
-                            "}");
-    ui->spinBox_y_end->setStyleSheet("QSpinBox {"
-                              "display: inline-block;"
-                              "font-size: 12px;"
-                              "cursor: pointer;"
-                              "text-align: center;"
-                              "text-decoration: none;"
-                              "outline: none;"
-                              "color: #696969;"
-                              "background-color: #DCDCDC;"
-                              "border: none;"
-                              "border-radius: 10px;"
-                              "box-shadow: 0 9px #999;"
-                            "}");
     ui->spinBox_x_start->setStyleSheet("QSpinBox {"
                               "display: inline-block;"
                               "font-size: 12px;"
@@ -268,13 +243,76 @@ MainWindow::MainWindow(QWidget *parent)
                               "border-radius: 10px;"
                               "box-shadow: 0 9px #999;"
                             "}");
+    ui->spinBox_a->setStyleSheet("QSpinBox {"
+                              "display: inline-block;"
+                              "font-size: 12px;"
+                              "cursor: pointer;"
+                              "text-align: center;"
+                              "text-decoration: none;"
+                              "outline: none;"
+                              "color: #696969;"
+                              "background-color: #DCDCDC;"
+                              "border: none;"
+                              "border-radius: 10px;"
+                              "box-shadow: 0 9px #999;"
+                            "}");
+    ui->spinBox_b->setStyleSheet("QSpinBox {"
+                              "display: inline-block;"
+                              "font-size: 12px;"
+                              "cursor: pointer;"
+                              "text-align: center;"
+                              "text-decoration: none;"
+                              "outline: none;"
+                              "color: #696969;"
+                              "background-color: #DCDCDC;"
+                              "border: none;"
+                              "border-radius: 10px;"
+                              "box-shadow: 0 9px #999;"
+                            "}");
+    ui->spinBox_radius->setStyleSheet("QSpinBox {"
+                              "display: inline-block;"
+                              "font-size: 12px;"
+                              "cursor: pointer;"
+                              "text-align: center;"
+                              "text-decoration: none;"
+                              "outline: none;"
+                              "color: #696969;"
+                              "background-color: #DCDCDC;"
+                              "border: none;"
+                              "border-radius: 10px;"
+                              "box-shadow: 0 9px #999;"
+                            "}");
+    ui->spinBox_step->setStyleSheet("QSpinBox {"
+                              "display: inline-block;"
+                              "font-size: 12px;"
+                              "cursor: pointer;"
+                              "text-align: center;"
+                              "text-decoration: none;"
+                              "outline: none;"
+                              "color: #696969;"
+                              "background-color: #DCDCDC;"
+                              "border: none;"
+                              "border-radius: 10px;"
+                              "box-shadow: 0 9px #999;"
+                            "}");
+    ui->spinBox_count->setStyleSheet("QSpinBox {"
+                              "display: inline-block;"
+                              "font-size: 12px;"
+                              "cursor: pointer;"
+                              "text-align: center;"
+                              "text-decoration: none;"
+                              "outline: none;"
+                              "color: #696969;"
+                              "background-color: #DCDCDC;"
+                              "border: none;"
+                              "border-radius: 10px;"
+                              "box-shadow: 0 9px #999;"
+                            "}");
 }
 
 
 MainWindow::~MainWindow()
 {
-    request_t request;
-    request.action = QUIT;
     delete ui;
 }
 
@@ -307,64 +345,28 @@ void MainWindow::on_go_back_Button_clicked()
     {
         item.k = k;
         item.pix_size = pix;
-        switch_action(item);
+        if (item.type == CIRCLE)
+            switch_action_circle(item);
+        else if (item.type == ELLIPSE)
+            switch_action_ellipse(item);
     }
 }
-
-
-void MainWindow::on_addlineButton_clicked()
-{
-    request_t request;
-    request.action = act;
-    error_code_t er = OK;
-    ret_data_t r;
-
-    if (act == NO_ALG)
-    {
-        er = ERROR_NO_ALG;
-        error_message(er);
-        return;
-    }
-
-    if (ui->listWidget->selectedItems().size() == 0)
-    {
-        er = ERROR_NO_COLOR;
-        error_message(er);
-        return;
-    }
-
-    request.color = ui->listWidget->currentItem()->text();
-    request.start.x = ui->spinBox_x_start->value();
-    request.start.y = ui->spinBox_y_start->value();
-    request.end.x = ui->spinBox_x_end->value();
-    request.end.y = ui->spinBox_y_end->value();
-
-    request.canvas = canvas;
-    request.k = k;
-    request.pix_size = pix;
-
-    actions_arr.push_back(request);
-    r = switch_action(request);
-}
-
 
 void MainWindow::on_comboBox_activated(int index)
 {
     QString alg = ui->comboBox->currentText();
     printf("%d", index);
 
-    if (alg == "DDA")
-        act = DDA;
-    else if (alg == "Qtline")
-        act = ORDINARYLINE;
-    else if (alg == "BresenhamReal")
-        act = B_REAL;
-    else if (alg == "BresenhamInt")
-        act = B_INT;
-    else if (alg == "Wu")
-        act = WU;
-    else if (alg == "BresenhamWS")
-        act = B_WS;
+    if (alg == "Canon")
+        act = CANON;
+    else if (alg == "Param")
+        act = PARAM;
+    else if (alg == "Bresenham")
+        act = BRESENHAM;
+    else if (alg == "MidPoint")
+        act = MIDPOINT;
+    else if (alg == "Ordinary")
+        act = ORDINARY;
     else
         act = NO_ALG;
 }
@@ -399,7 +401,10 @@ void MainWindow::on_horizontalSlider_sliderMoved(int position)
     {
         item.k = k;
         item.pix_size = pix;
-        r = switch_action(item);
+        if (item.type == CIRCLE)
+            r = switch_action_circle(item);
+        else if (item.type == ELLIPSE)
+            r = switch_action_ellipse(item);
     }
 }
 
@@ -433,13 +438,18 @@ void MainWindow::on_action_7_triggered()
 
 void MainWindow::on_Button_compare_clicked()
 {
-    int step = ui->spinBox->value();
-
     error_code_t er = OK;
-
-    if (act == NO_ALG || act == ORDINARYLINE)
+    ret_data_t r;
+    if (act == NO_ALG)
     {
         er = ERROR_NO_ALG;
+        error_message(er);
+        return;
+    }
+
+    if (type == NO_TYPE)
+    {
+        er = ERROR_NO_TYPE;
         error_message(er);
         return;
     }
@@ -451,230 +461,252 @@ void MainWindow::on_Button_compare_clicked()
         return;
     }
 
-    point_t center;
-    center.x = 0;
-    center.y = 0;
-    int len = 50;
+    int step = ui->spinBox_step->value();
+    int count = ui->spinBox_count->value();
 
-    for(int i = 0; i <= 360; i+= step)
+    for(int i = 0; i < count; i++)
     {
-        point_t end;
-        end.x = RoundToInt(center.x + len * cos(i * PI / 180.0));
-        end.y = RoundToInt(center.y + len * sin(i * PI / 180.0));
         request_t request;
         request.action = act;
-
+        request.type = type;
         request.color = ui->listWidget->currentItem()->text();
-        request.start.x = center.x;
-        request.start.y = center.y;
-        request.end.x = end.x;
-        request.end.y = end.y;
+        request.center.x = ui->spinBox_x_start->value();
+        request.center.y = ui->spinBox_y_start->value();
+        request.a = ui->spinBox_a->value();
+        request.b = ui->spinBox_b->value();
+        request.radius = ui->spinBox_radius->value() + step * i;
 
         request.canvas = canvas;
         request.k = k;
         request.pix_size = pix;
+        request.flag = 1;
         actions_arr.push_back(request);
-        switch_action(request);
+        if (type == ELLIPSE)
+            r = switch_action_ellipse(request);
+        else if (type == CIRCLE)
+            r = switch_action_circle(request);
     }
 }
 
-
-void MainWindow::on_actionDDA_triggered()
+void MainWindow::on_checkBox_stateChanged(int arg1)
 {
-    FILE *f = fopen("output.txt", "w");
+    type = CIRCLE;
+    ui->checkBox_2->setCheckState(Qt::Unchecked);
+}
 
-    int len = 150;
-    point_t center;
-    center.x = 0;
-    center.y = 0;
 
-    for(int i = 0; i <= 360; i++)
+void MainWindow::on_checkBox_2_stateChanged(int arg1)
+{
+    type = ELLIPSE;
+    ui->checkBox->setCheckState(Qt::Unchecked);
+}
+
+
+void MainWindow::on_pushButton_Add_clicked()
+{
+    request_t request;
+    request.action = act;
+    request.type = type;
+    error_code_t er = OK;
+    ret_data_t r;
+
+    if (act == NO_ALG)
     {
-        point_t end;
-        end.x = RoundToInt(center.x + len * cos(i * PI / 180.0));
-        end.y = RoundToInt(center.y + len * sin(i * PI / 180.0));
-        request_t request;
-        request.action = DDA;
-        ret_data_t er;
+        er = ERROR_NO_ALG;
+        error_message(er);
+        return;
+    }
 
+    if (type == NO_TYPE)
+    {
+        er = ERROR_NO_TYPE;
+        error_message(er);
+        return;
+    }
+
+    if (ui->listWidget->selectedItems().size() == 0)
+    {
+        er = ERROR_NO_COLOR;
+        error_message(er);
+        return;
+    }
+
+    request.color = ui->listWidget->currentItem()->text();
+    request.center.x = ui->spinBox_x_start->value();
+    request.center.y = ui->spinBox_y_start->value();
+    request.a = ui->spinBox_a->value();
+    request.b = ui->spinBox_b->value();
+    request.radius = ui->spinBox_radius->value();
+
+    request.canvas = canvas;
+    request.k = k;
+    request.pix_size = pix;
+    request.flag = 1;
+
+    actions_arr.push_back(request);
+    if (type == ELLIPSE)
+        r = switch_action_ellipse(request);
+    else if (type == CIRCLE)
+        r = switch_action_circle(request);
+}
+
+
+void MainWindow::on_actionCanon_triggered()
+{
+    error_code_t er;
+    if (type == NO_TYPE)
+    {
+        er = ERROR_NO_TYPE;
+        error_message(er);
+        return;
+    }
+
+    FILE *f = fopen("output.txt", "w");
+    ret_data_t r;
+    r.radius = 20;
+    for (int i = 2; i < 150; i++)
+    {
+        request_t request;
+        request.action = CANON;
+        request.type = type;
         request.color = ui->listWidget->item(0)->text();
-        request.start.x = center.x;
-        request.start.y = center.y;
-        request.end.x = end.x;
-        request.end.y = end.y;
+        request.center.x = ui->spinBox_x_start->value();
+        request.center.y = ui->spinBox_y_start->value();
+        request.a = i;
+        request.b = i;
+        request.radius = i;
 
         request.canvas = canvas;
         request.k = k;
         request.pix_size = pix;
-
-        er = switch_action(request);
-        er.a = i;
-        fprintf(f, "%d %d\n", (int)er.a, er.steps);
+        request.flag = 0;
+        if (type == ELLIPSE)
+            r = switch_action_ellipse(request);
+        else if (type == CIRCLE)
+            r = switch_action_circle(request);
+        fprintf(f, "%d %lf\n", r.radius, r.time);
     }
     fclose(f);
-    request_t request;
-    request.action = NO_ALG;
-    actions_arr.push_back(request);
     system("python graph.py");
 }
 
 
-void MainWindow::on_actionBresenhamReal_triggered()
+void MainWindow::on_actionParam_triggered()
 {
-    FILE *f = fopen("output.txt", "w");
-
-    int len = 150;
-    point_t center;
-    center.x = 0;
-    center.y = 0;
-
-    for(int i = 0; i <= 360; i++)
+    error_code_t er;
+    if (type == NO_TYPE)
     {
-        point_t end;
-        end.x = RoundToInt(center.x + len * cos(i * PI / 180.0));
-        end.y = RoundToInt(center.y + len * sin(i * PI / 180.0));
-        request_t request;
-        request.action = B_REAL;
-        ret_data_t er;
+        er = ERROR_NO_TYPE;
+        error_message(er);
+        return;
+    }
 
+    FILE *f = fopen("output.txt", "w");
+    ret_data_t r;
+    r.radius = 20;
+    for (int i = 2; i < 150; i++)
+    {
+        request_t request;
+        request.action = PARAM;
+        request.type = type;
         request.color = ui->listWidget->item(0)->text();
-        request.start.x = center.x;
-        request.start.y = center.y;
-        request.end.x = end.x;
-        request.end.y = end.y;
+        request.center.x = ui->spinBox_x_start->value();
+        request.center.y = ui->spinBox_y_start->value();
+        request.a = i;
+        request.b = i;
+        request.radius = i;
 
         request.canvas = canvas;
         request.k = k;
         request.pix_size = pix;
-
-        er = switch_action(request);
-        er.a = i;
-        fprintf(f, "%d %d\n", (int)er.a, er.steps);
+        request.flag = 0;
+        if (type == ELLIPSE)
+            r = switch_action_ellipse(request);
+        else if (type == CIRCLE)
+            r = switch_action_circle(request);
+        fprintf(f, "%d %lf\n", r.radius, r.time);
     }
     fclose(f);
-    request_t request;
-    request.action = NO_ALG;
-    actions_arr.push_back(request);
     system("python graph.py");
 }
 
 
-void MainWindow::on_actionBresenhamInt_triggered()
+void MainWindow::on_actionBresenham_triggered()
 {
-    FILE *f = fopen("output.txt", "w");
-
-    int len = 150;
-    point_t center;
-    center.x = 0;
-    center.y = 0;
-
-    for(int i = 0; i <= 360; i++)
+    error_code_t er;
+    if (type == NO_TYPE)
     {
-        point_t end;
-        end.x = RoundToInt(center.x + len * cos(i * PI / 180.0));
-        end.y = RoundToInt(center.y + len * sin(i * PI / 180.0));
-        request_t request;
-        request.action = B_INT;
-        ret_data_t er;
+        er = ERROR_NO_TYPE;
+        error_message(er);
+        return;
+    }
 
+    FILE *f = fopen("output.txt", "w");
+    ret_data_t r;
+    r.radius = 20;
+    for (int i = 2; i < 150; i++)
+    {
+        request_t request;
+        request.action = BRESENHAM;
+        request.type = type;
         request.color = ui->listWidget->item(0)->text();
-        request.start.x = center.x;
-        request.start.y = center.y;
-        request.end.x = end.x;
-        request.end.y = end.y;
+        request.center.x = ui->spinBox_x_start->value();
+        request.center.y = ui->spinBox_y_start->value();
+        request.a = i;
+        request.b = i;
+        request.radius = i;
 
         request.canvas = canvas;
         request.k = k;
         request.pix_size = pix;
-
-        er = switch_action(request);
-        er.a = i;
-        fprintf(f, "%d %d\n", (int)er.a, er.steps);
+        request.flag = 0;
+        if (type == ELLIPSE)
+            r = switch_action_ellipse(request);
+        else if (type == CIRCLE)
+            r = switch_action_circle(request);
+        fprintf(f, "%d %lf\n", r.radius, r.time);
     }
     fclose(f);
-    request_t request;
-    request.action = NO_ALG;
-    actions_arr.push_back(request);
     system("python graph.py");
 }
 
 
-void MainWindow::on_actionBresenhamWS_triggered()
+void MainWindow::on_actionMidPoint_triggered()
 {
-    FILE *f = fopen("output.txt", "w");
-
-    int len = 150;
-    point_t center;
-    center.x = 0;
-    center.y = 0;
-
-    for(int i = 0; i <= 360; i++)
+    error_code_t er;
+    if (type == NO_TYPE)
     {
-        point_t end;
-        end.x = RoundToInt(center.x + len * cos(i * PI / 180.0));
-        end.y = RoundToInt(center.y + len * sin(i * PI / 180.0));
-        request_t request;
-        request.action = B_WS;
-        ret_data_t er;
+        er = ERROR_NO_TYPE;
+        error_message(er);
+        return;
+    }
 
+    FILE *f = fopen("output.txt", "w");
+    ret_data_t r;
+    r.radius = 20;
+    for (int i = 2; i < 150; i++)
+    {
+        request_t request;
+        request.action = MIDPOINT;
+        request.type = type;
         request.color = ui->listWidget->item(0)->text();
-        request.start.x = center.x;
-        request.start.y = center.y;
-        request.end.x = end.x;
-        request.end.y = end.y;
+        request.center.x = ui->spinBox_x_start->value();
+        request.center.y = ui->spinBox_y_start->value();
+        request.a = i;
+        request.b = i;
+        request.radius = i;
 
         request.canvas = canvas;
         request.k = k;
         request.pix_size = pix;
-
-        er = switch_action(request);
-        er.a = i;
-        fprintf(f, "%d %d\n", (int)er.a, er.steps);
+        request.flag = 0;
+        if (type == ELLIPSE)
+            r = switch_action_ellipse(request);
+        else if (type == CIRCLE)
+            r = switch_action_circle(request);
+        fprintf(f, "%d %lf\n", r.radius, r.time);
     }
     fclose(f);
-    request_t request;
-    request.action = NO_ALG;
-    actions_arr.push_back(request);
-    system("python graph.py");
-}
-
-
-void MainWindow::on_actionWu_triggered()
-{
-    FILE *f = fopen("output.txt", "w");
-
-    int len = 150;
-    point_t center;
-    center.x = 0;
-    center.y = 0;
-
-    for(int i = 0; i <= 360; i++)
-    {
-        point_t end;
-        end.x = RoundToInt(center.x + len * cos(i * PI / 180.0));
-        end.y = RoundToInt(center.y + len * sin(i * PI / 180.0));
-        request_t request;
-        request.action = WU;
-        ret_data_t er;
-
-        request.color = ui->listWidget->item(0)->text();
-        request.start.x = center.x;
-        request.start.y = center.y;
-        request.end.x = end.x;
-        request.end.y = end.y;
-
-        request.canvas = canvas;
-        request.k = k;
-        request.pix_size = pix;
-
-        er = switch_action(request);
-        er.a = i;
-        fprintf(f, "%d %d\n", (int)er.a, er.steps);
-    }
-    fclose(f);
-    request_t request;
-    request.action = NO_ALG;
-    actions_arr.push_back(request);
     system("python graph.py");
 }
 

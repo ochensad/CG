@@ -1,0 +1,821 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1550</width>
+    <height>844</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Отсечение прямоугольным отсекателем</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QGraphicsView" name="view">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>1200</width>
+      <height>800</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>1200</width>
+      <height>0</height>
+     </size>
+    </property>
+   </widget>
+   <widget class="QTableWidget" name="table">
+    <property name="geometry">
+     <rect>
+      <x>1230</x>
+      <y>10</y>
+      <width>301</width>
+      <height>211</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QTableWidget {display: inline-block;
+                              font-size: 12px;
+                              cursor: pointer;
+                              text-align: center;
+                              text-decoration: none;
+                              outline: none;
+                              color: #696969;
+                              background-color: #fff;
+                              border: none;
+                              border-radius: 10px;
+                              box-shadow: 0 9px #999;
+                            }
+QTableWidget:hover {background-color: #fff}
+QTableWidget:pressed {
+selection-background-color: #C0C0C0;
+                              box-shadow: 0 5px #666;
+                              transform: translateY(4px);
+                            }</string>
+    </property>
+    <column>
+     <property name="text">
+      <string>НАЧАЛО</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>КОНЕЦ</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QGroupBox" name="groupBox">
+    <property name="geometry">
+     <rect>
+      <x>1230</x>
+      <y>230</y>
+      <width>301</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>Отсекатель</string>
+    </property>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>20</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Xн</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="x_n">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>20</y>
+       <width>81</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QSpinBox {
+                              display: inline-block;
+                              font-size: 16px;
+                              cursor: pointer;
+                              text-align: center;
+                              text-decoration: none;
+                              outline: none;
+                              color: #696969;
+                              background-color: #fff;
+                              border: none;
+                              border-radius: 10px;
+                              box-shadow: 0 9px #999;
+                            }
+                            QSpinBox:hover {background-color: #fff}
+                            QSpinBox:pressed {
+                              selection-background-color: #C0C0C0;
+                              box-shadow: 0 5px #666;
+                              transform: translateY(4px);
+                            }</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>1200</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>50</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Xк</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="x_k">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>50</y>
+       <width>81</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QSpinBox {
+                              display: inline-block;
+                              font-size: 16px;
+                              cursor: pointer;
+                              text-align: center;
+                              text-decoration: none;
+                              outline: none;
+                              color: #696969;
+                              background-color: #fff;
+                              border: none;
+                              border-radius: 10px;
+                              box-shadow: 0 9px #999;
+                            }
+                            QSpinBox:hover {background-color: #fff}
+                            QSpinBox:pressed {
+                              selection-background-color: #C0C0C0;
+                              box-shadow: 0 5px #666;
+                              transform: translateY(4px);
+                            }</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>1200</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_5">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>20</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Yн</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="y_n">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>20</y>
+       <width>81</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QSpinBox {
+                              display: inline-block;
+                              font-size: 16px;
+                              cursor: pointer;
+                              text-align: center;
+                              text-decoration: none;
+                              outline: none;
+                              color: #696969;
+                              background-color: #fff;
+                              border: none;
+                              border-radius: 10px;
+                              box-shadow: 0 9px #999;
+                            }
+                            QSpinBox:hover {background-color: #fff}
+                            QSpinBox:pressed {
+                              selection-background-color: #C0C0C0;
+                              box-shadow: 0 5px #666;
+                              transform: translateY(4px);
+                            }</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>800</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_7">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>50</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Yк</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="y_k">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>50</y>
+       <width>81</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QSpinBox {
+                              display: inline-block;
+                              font-size: 16px;
+                              cursor: pointer;
+                              text-align: center;
+                              text-decoration: none;
+                              outline: none;
+                              color: #696969;
+                              background-color: #fff;
+                              border: none;
+                              border-radius: 10px;
+                              box-shadow: 0 9px #999;
+                            }
+                            QSpinBox:hover {background-color: #fff}
+                            QSpinBox:pressed {
+                              selection-background-color: #C0C0C0;
+                              box-shadow: 0 5px #666;
+                              transform: translateY(4px);
+                            }</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>800</number>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="check">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>80</y>
+       <width>201</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Ввод с полей</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="rect">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>110</y>
+       <width>281</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+                                display: inline-block;
+                                  font-size: 16px;
+                                  cursor: pointer;
+                                  text-align: center;
+                                  text-decoration: none;
+                                  outline: none;
+                                  color: #fff;
+                                  background-color: #4CAF50;
+                                  border: none;
+                                  border-radius: 10px;
+                                 box-shadow: 0 9px #999;
+                                }
+QPushButton:hover {background-color: #3e8e41}
+QPushButton:pressed {
+                                  background-color: #3e8e41;
+                                  box-shadow: 0 5px #666;
+                                  transform: translateY(4px);
+                                }</string>
+     </property>
+     <property name="text">
+      <string>Ввести отсекатель</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>1230</x>
+      <y>390</y>
+      <width>301</width>
+      <height>211</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>Отрезки</string>
+    </property>
+    <widget class="QLabel" name="label_11">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>25</y>
+       <width>20</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Xн</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="xn">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>20</y>
+       <width>81</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QSpinBox {
+                              display: inline-block;
+                              font-size: 16px;
+                              cursor: pointer;
+                              text-align: center;
+                              text-decoration: none;
+                              outline: none;
+                              color: #696969;
+                              background-color: #fff;
+                              border: none;
+                              border-radius: 10px;
+                              box-shadow: 0 9px #999;
+                            }
+                            QSpinBox:hover {background-color: #fff}
+                            QSpinBox:pressed {
+                              selection-background-color: #C0C0C0;
+                              box-shadow: 0 5px #666;
+                              transform: translateY(4px);
+                            }</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>1200</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_10">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>51</y>
+       <width>20</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Xк</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="xk">
+     <property name="geometry">
+      <rect>
+       <x>50</x>
+       <y>50</y>
+       <width>81</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QSpinBox {
+                              display: inline-block;
+                              font-size: 16px;
+                              cursor: pointer;
+                              text-align: center;
+                              text-decoration: none;
+                              outline: none;
+                              color: #696969;
+                              background-color: #fff;
+                              border: none;
+                              border-radius: 10px;
+                              box-shadow: 0 9px #999;
+                            }
+                            QSpinBox:hover {background-color: #fff}
+                            QSpinBox:pressed {
+                              selection-background-color: #C0C0C0;
+                              box-shadow: 0 5px #666;
+                              transform: translateY(4px);
+                            }</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>1200</number>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>20</y>
+       <width>20</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Yн</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_9">
+     <property name="geometry">
+      <rect>
+       <x>170</x>
+       <y>50</y>
+       <width>20</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Yк</string>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="yk">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>50</y>
+       <width>81</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QSpinBox {
+                              display: inline-block;
+                              font-size: 16px;
+                              cursor: pointer;
+                              text-align: center;
+                              text-decoration: none;
+                              outline: none;
+                              color: #696969;
+                              background-color: #fff;
+                              border: none;
+                              border-radius: 10px;
+                              box-shadow: 0 9px #999;
+                            }
+                            QSpinBox:hover {background-color: #fff}
+                            QSpinBox:pressed {
+                              selection-background-color: #C0C0C0;
+                              box-shadow: 0 5px #666;
+                              transform: translateY(4px);
+                            }</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>800</number>
+     </property>
+    </widget>
+    <widget class="QSpinBox" name="yn">
+     <property name="geometry">
+      <rect>
+       <x>200</x>
+       <y>20</y>
+       <width>81</width>
+       <height>24</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QSpinBox {
+                              display: inline-block;
+                              font-size: 16px;
+                              cursor: pointer;
+                              text-align: center;
+                              text-decoration: none;
+                              outline: none;
+                              color: #696969;
+                              background-color: #fff;
+                              border: none;
+                              border-radius: 10px;
+                              box-shadow: 0 9px #999;
+                            }
+                            QSpinBox:hover {background-color: #fff}
+                            QSpinBox:pressed {
+                              selection-background-color: #C0C0C0;
+                              box-shadow: 0 5px #666;
+                              transform: translateY(4px);
+                            }</string>
+     </property>
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>800</number>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="horiz">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>80</y>
+       <width>261</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Горизонтальный отрезок</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="vertic">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>110</y>
+       <width>221</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Вертикальный отрезок</string>
+     </property>
+    </widget>
+    <widget class="QCheckBox" name="check_o">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>140</y>
+       <width>211</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Ввод с полей</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="bars">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>170</y>
+       <width>281</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+                                display: inline-block;
+                                  font-size: 16px;
+                                  cursor: pointer;
+                                  text-align: center;
+                                  text-decoration: none;
+                                  outline: none;
+                                  color: #fff;
+                                  background-color: #4CAF50;
+                                  border: none;
+                                  border-radius: 10px;
+                                 box-shadow: 0 9px #999;
+                                }
+QPushButton:hover {background-color: #3e8e41}
+QPushButton:pressed {
+                                  background-color: #3e8e41;
+                                  box-shadow: 0 5px #666;
+                                  transform: translateY(4px);
+                                }</string>
+     </property>
+     <property name="text">
+      <string>Ввести отрезки</string>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_3">
+    <property name="geometry">
+     <rect>
+      <x>1230</x>
+      <y>610</y>
+      <width>301</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="title">
+     <string>Функции</string>
+    </property>
+    <widget class="QPushButton" name="ect">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>30</y>
+       <width>281</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>-1</pointsize>
+       <bold>true</bold>
+       <underline>false</underline>
+       <strikeout>false</strikeout>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+                                display: inline-block;
+                                  font-size: 13px;
+                                  cursor: pointer;
+                                  text-align: center;
+                                  text-decoration: none;
+                                  outline: none;
+                                  color: #fff;
+                                  background-color: #4CAF50;
+                                  border: none;
+                                  border-radius: 10px;
+                                 box-shadow: 0 9px #999;
+                                }
+QPushButton:hover {background-color: #3e8e41}
+QPushButton:pressed {
+                                  background-color: #3e8e41;
+                                  box-shadow: 0 5px #666;
+                                  transform: translateY(4px);
+                                }</string>
+     </property>
+     <property name="text">
+      <string>Добавить отрезки на границы</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="paint">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>70</y>
+       <width>281</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+                                display: inline-block;
+                                  font-size: 16px;
+                                  cursor: pointer;
+                                  text-align: center;
+                                  text-decoration: none;
+                                  outline: none;
+                                  color: #fff;
+                                  background-color: #4CAF50;
+                                  border: none;
+                                  border-radius: 10px;
+                                 box-shadow: 0 9px #999;
+                                }
+QPushButton:hover {background-color: #3e8e41}
+QPushButton:pressed {
+                                  background-color: #3e8e41;
+                                  box-shadow: 0 5px #666;
+                                  transform: translateY(4px);
+                                }</string>
+     </property>
+     <property name="text">
+      <string>Отсечь</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="erase">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>110</y>
+       <width>281</width>
+       <height>32</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+                              display: inline-block;
+                              font-size: 16px;
+                              cursor: pointer;
+                              text-align: center;
+                              text-decoration: none;
+                              outline: none;
+                              color: #fff;
+                              background-color: #DC143C;
+                              border: none;
+                              border-radius: 10px;
+                              box-shadow: 0 9px #999;
+                            }
+QPushButton:hover {background-color: #B22222}
+QPushButton:pressed {
+                             background-color: #B22222;
+                             box-shadow: 0 5px #666;
+                             transform: translateY(4px);
+                            }</string>
+     </property>
+     <property name="text">
+      <string>Очистить</string>
+     </property>
+    </widget>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

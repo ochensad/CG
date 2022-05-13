@@ -178,6 +178,7 @@ def change_and_read_m():
     global Y_m_m
     X_m_m = x
     Y_m_m = y
+    en5.delete(0, END)
 
 def zoom_win():
     global en1_4
@@ -335,6 +336,7 @@ def change_and_read_xc_yc():
     global Y_m_t
     X_m_t = x
     Y_m_t = y
+    en1.delete(0, END)
 
 def change_and_read_dx():
     global dx
